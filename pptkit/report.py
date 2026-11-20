@@ -25,8 +25,8 @@ from . import theme as T
 from .layouts import _style_run
 
 IN = 914400
-COLORS = {"ink": "R_INK", "mid": "R_MID", "faint": "R_FAINT", "accent": "R_ACCENT",
-          "blue": "R_BLUE", "white": "WHITE"}
+COLORS = {"ink": "R_INK", "mid": "R_MID", "faint": "R_FAINT", "accent": "R_ACCENT", "red": "R_ACCENT",
+          "blue": "R_BLUE", "green": "R_GREEN", "white": "WHITE"}
 ALIGN = {"left": PP_ALIGN.LEFT, "center": PP_ALIGN.CENTER, "right": PP_ALIGN.RIGHT}
 ANCHOR = {"top": MSO_ANCHOR.TOP, "middle": MSO_ANCHOR.MIDDLE, "bottom": MSO_ANCHOR.BOTTOM}
 
@@ -152,121 +152,127 @@ class ReportDeck:
         return self.prs.slides.add_slide(self.prs.slide_layouts[6])
 
     # ----------------------------------------------------------------
-    def _chrome(self, s, title, kicker):
-        m = T.R_MARGIN
-        if kicker:
-            tf = _box(s, m, T.R_KICKER_Y, self.W - 2 * m, 0.22)
-            _rich(tf.paragraphs[0], kicker, T.R_SIZE_KICKER, T.R_MID)
-        tw = self.W - 2 * m - 0.2
+    # MIT 模板的外框：顶部红条 + 灰色标题条（白字）+ 红线；底部渐变页脚条 + 页码 + 校徽
+    # ----------------------------------------------------------------
+    def _chrome(self, s, title):
+        W = self.W
+        _rect(s, 0, 0, W, T.R_TOP_BAR, fill=T.R_ACCENT)
+        _rect(s, 0, T.R_TOP_BAR, W, T.R_BAND_BOTTOM - T.R_TOP_BAR, fill=T.R_BAND)
+        _rect(s, 0, T.R_BAND_BOTTOM, W, T.R_RED_LINE, fill=T.R_ACCENT)
+        tw = W - T.R_TITLE_X - 0.4
         size = T.R_SIZE_TITLE
-        for cand in (T.R_SIZE_TITLE, Pt(22), Pt(20)):
+        for cand in (T.R_SIZE_TITLE, Pt(26), Pt(24)):
             size = cand
             if _est_width(title, cand.pt) <= tw:
                 break
         if _est_width(title, size.pt) > tw:
             print(f"  [提醒] 第 {len(self.prs.slides)} 页标题可能放不下一行：{title}")
-        tf = _box(s, m, T.R_TITLE_Y, tw, 0.52, "bottom")
-        _rich(tf.paragraphs[0], title, size, T.R_INK, True)
-        _rect(s, m, T.R_RULE_Y, self.W - 2 * m, 0.012, fill=T.R_RULE)
-        _rect(s, m, T.R_RULE_Y - 0.008, 0.62, 0.028, fill=T.R_ACCENT)
+        tf = _box(s, T.R_TITLE_X, T.R_TOP_BAR, tw, T.R_BAND_BOTTOM - T.R_TOP_BAR, "middle")
+        _rich(tf.paragraphs[0], title, size, T.WHITE, False)
         self._footer(s)
 
     def _footer(self, s):
-        m = T.R_MARGIN
-        y = self.H - 0.38
-        if self.footer:
-            tf = _box(s, m, y, 6.0, 0.22, "middle")
-            _rich(tf.paragraphs[0], self.footer, T.R_SIZE_FOOTER, T.R_FAINT)
-        n = len(self.prs.slides)
-        right = self.W - m
+        W, y, h = self.W, T.R_FOOT_Y, T.R_FOOT_H
+        band = _rect(s, 0, y, W, h, fill=T.R_BAND)
+        # 渐变：右上浅、左下深（PDF 上量得：左 178 → 右 237，上 205 → 下 150）
+        spPr = band._element.spPr
+        for tag in ("a:solidFill", "a:noFill", "a:gradFill"):
+            for el in spPr.findall(qn(tag)):
+                spPr.remove(el)
+        grad = etree.Element(qn("a:gradFill"))
+        grad.set("rotWithShape", "1")
+        gs = etree.SubElement(grad, qn("a:gsLst"))
+        for pos, col in ((0, "F1F1F1"), (100000, "959697")):
+            g = etree.SubElement(gs, qn("a:gs"))
+            g.set("pos", str(pos))
+            etree.SubElement(g, qn("a:srgbClr")).set("val", col)
+        lin = etree.SubElement(grad, qn("a:lin"))
+        lin.set("ang", str(int(92.4 * 60000)))
+        lin.set("scaled", "0")
+        spPr.insert(1, grad)
+        # 页码：红色，居中偏左（MIT 在 6.45 in）
+        tf = _box(s, 6.05, y, 0.8, h, "middle")
+        tf.paragraphs[0].alignment = PP_ALIGN.CENTER
+        _rich(tf.paragraphs[0], str(len(self.prs.slides)), T.R_SIZE_PAGE, T.R_ACCENT)
         if self.logo and self.logo.exists():
             with Image.open(self.logo) as im:
                 iw, ih = im.size
-            h = 0.30
-            w = h * iw / ih
-            s.shapes.add_picture(str(self.logo), _i(right - w), _i(y - 0.05), _i(w), _i(h))
-            right -= w + 0.18
-        tf = _box(s, right - 0.6, y, 0.6, 0.22, "middle")
-        tf.paragraphs[0].alignment = PP_ALIGN.RIGHT
-        _rich(tf.paragraphs[0], str(n), T.R_SIZE_FOOTER, T.R_FAINT)
+            lh = 0.50
+            lw = lh * iw / ih
+            s.shapes.add_picture(str(self.logo), _i(W - 0.23 - lw), _i(y + 0.02), _i(lw), _i(lh))
 
     # ================================================================
     # 版式
     # ================================================================
-    def cover(self, title, subtitle=None, lines=None, image=None, logo=None, notes=None):
+    def cover(self, title, authors=None, affiliation=None, event=None, date=None,
+              logo=None, notes=None):
+        """MIT 封面：上方居中校徽；中间灰色标题带（上下红线、白色粗体标题）；
+        下方作者、单位；底部汇报场合与日期。"""
         s = self._new()
-        m = 0.75
+        W = self.W
         if logo:
             p = self._path(logo)
             with Image.open(p) as im:
                 iw, ih = im.size
-            h = 0.72
-            s.shapes.add_picture(str(p), _i(m), _i(0.55), _i(h * iw / ih), _i(h))
-        text_w = 6.6 if image else self.W - 2 * m
-        tf = _box(s, m, 2.05, text_w, 1.55, "bottom")
+            h = 1.25
+            w = h * iw / ih
+            s.shapes.add_picture(str(p), _i((W - w) / 2), _i(0.62), _i(w), _i(h))
+        _rect(s, 0, 2.39, W, 0.07, fill=T.R_COVER_RED)
+        _rect(s, 0, 2.46, W, 2.20, fill=T.R_COVER_BAND)
+        _rect(s, 0, 4.66, W, 0.07, fill=T.R_COVER_RED)
+        tf = _box(s, 0.45, 2.46, W - 0.9, 2.20, "middle")
         for k, part in enumerate(str(title).split("<br>")):
             p = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
-            p.line_spacing = 1.1
-            _rich(p, part, Pt(32), T.R_INK, True)
-        _rect(s, m, 3.78, 0.62, 0.035, fill=T.R_ACCENT)
-        if subtitle:
-            tf = _box(s, m, 3.98, text_w, 0.5)
-            _rich(tf.paragraphs[0], subtitle, Pt(18), T.R_MID)
+            p.alignment = PP_ALIGN.CENTER
+            p.line_spacing = 1.08
+            _rich(p, part, Pt(40), T.WHITE, True)
+        y = 5.0
+        if authors:
+            tf = _box(s, 0, y, W, 0.45, "middle")
+            tf.paragraphs[0].alignment = PP_ALIGN.CENTER
+            _rich(tf.paragraphs[0], authors, Pt(22), T.R_INK)
+            y += 0.48
+        if affiliation:
+            tf = _box(s, 0, y, W, 0.35, "middle")
+            tf.paragraphs[0].alignment = PP_ALIGN.CENTER
+            _rich(tf.paragraphs[0], affiliation, Pt(16), T.R_INK)
+        lines = [x for x in (event, date) if x]
         if lines:
-            tf = _box(s, m, 5.15, text_w, 1.6)
+            tf = _box(s, 0, 6.28, W, 0.7, "middle")
             for k, ln in enumerate(lines):
                 p = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
-                p.space_after = Pt(5)
-                _rich(p, ln, Pt(14), T.R_INK)
-        if image:
-            self._image(s, {"src": image, "x": 7.25, "y": 0.9, "w": 5.6, "h": 5.9})
-        self._notes(s, notes)
-        return s
-
-    def agenda(self, items, title="汇报内容", notes=None):
-        s = self._new()
-        m = 0.75
-        tf = _box(s, m, 0.95, 4.0, 0.6)
-        _rich(tf.paragraphs[0], title, Pt(28), T.R_INK, True)
-        _rect(s, m, 1.62, 0.62, 0.035, fill=T.R_ACCENT)
-        y = 2.15
-        for k, it in enumerate(items, 1):
-            it = it if isinstance(it, dict) else {"title": it}
-            tf = _box(s, m, y, 0.8, 0.5)
-            _rich(tf.paragraphs[0], f"{k:02d}", Pt(20), T.R_ACCENT, True)
-            tf = _box(s, m + 0.85, y, 6.5, 0.45)
-            _rich(tf.paragraphs[0], it["title"], Pt(20), T.R_INK, True)
-            if it.get("desc"):
-                tf = _box(s, m + 0.85, y + 0.42, 7.8, 0.35)
-                _rich(tf.paragraphs[0], it["desc"], T.R_SIZE_SMALL, T.R_MID)
-            _rect(s, m + 0.85, y + 0.86, 8.6, 0.01, fill=T.R_RULE)
-            y += 0.98
+                p.alignment = PP_ALIGN.CENTER
+                p.space_before = Pt(4) if k else Pt(0)
+                _rich(p, ln, Pt(18), T.R_INK)
         self._notes(s, notes)
         return s
 
     def end(self, title="谢谢", subtitle="敬请批评指正", logo=None, notes=None):
         s = self._new()
+        W = self.W
         if logo:
             p = self._path(logo)
             with Image.open(p) as im:
                 iw, ih = im.size
-            h = 0.8
+            h = 1.25
             w = h * iw / ih
-            s.shapes.add_picture(str(p), _i((self.W - w) / 2), _i(1.7), _i(w), _i(h))
-        tf = _box(s, 0, 3.0, self.W, 0.9, "middle")
+            s.shapes.add_picture(str(p), _i((W - w) / 2), _i(0.62), _i(w), _i(h))
+        _rect(s, 0, 2.39, W, 0.07, fill=T.R_COVER_RED)
+        _rect(s, 0, 2.46, W, 2.20, fill=T.R_COVER_BAND)
+        _rect(s, 0, 4.66, W, 0.07, fill=T.R_COVER_RED)
+        tf = _box(s, 0, 2.46, W, 2.20, "middle")
         tf.paragraphs[0].alignment = PP_ALIGN.CENTER
-        _rich(tf.paragraphs[0], title, Pt(36), T.R_INK, True)
-        _rect(s, (self.W - 0.62) / 2, 4.05, 0.62, 0.035, fill=T.R_ACCENT)
+        _rich(tf.paragraphs[0], title, Pt(44), T.WHITE, True)
         if subtitle:
-            tf = _box(s, 0, 4.25, self.W, 0.5, "middle")
+            tf = _box(s, 0, 5.1, W, 0.5, "middle")
             tf.paragraphs[0].alignment = PP_ALIGN.CENTER
-            _rich(tf.paragraphs[0], subtitle, Pt(16), T.R_MID)
+            _rich(tf.paragraphs[0], subtitle, Pt(20), T.R_INK)
         self._notes(s, notes)
         return s
 
-    def canvas(self, title, items=(), kicker=None, note=None, refs=None, notes=None):
+    def canvas(self, title, items=(), note=None, refs=None, notes=None):
         s = self._new()
-        self._chrome(s, title, kicker)
+        self._chrome(s, title)
         for it in items:
             getattr(self, "_" + it["type"])(s, it)
         if note:
@@ -304,7 +310,7 @@ class ReportDeck:
             cx = x + (w - cw) / 2
             tf = _box(s, cx, y + h + 0.06, cw, 0.4)
             tf.paragraphs[0].alignment = PP_ALIGN.CENTER
-            _rich(tf.paragraphs[0], it["caption"], T.R_SIZE_CAPTION, T.R_MID)
+            _rich(tf.paragraphs[0], it["caption"], Pt(it.get("cap_size", 13)), T.R_INK)
         return pic
 
     def _text(self, s, it):
@@ -406,7 +412,7 @@ class ReportDeck:
         x = it["x"] - (w if align == "right" else w / 2 if align == "center" else 0)
         tf = _box(s, x, it["y"], w, 0.3, "middle")
         tf.paragraphs[0].alignment = ALIGN[align]
-        _rich(tf.paragraphs[0], it["text"], size, _c(it.get("color", "mid")), it.get("bold", False))
+        _rich(tf.paragraphs[0], it["text"], size, _c(it.get("color", "ink")), it.get("bold", False))
         if it.get("to"):
             fx = it.get("from", [it["x"], it["y"] + 0.15])
             _line(s, fx[0], fx[1], it["to"][0], it["to"][1], color="faint", lw=0.75)
@@ -514,17 +520,19 @@ class ReportDeck:
         return gf
 
     def _note(self, s, text):
-        """页底关键结论（MIT 范例第 13 页的做法）。"""
-        tf = _box(s, T.R_MARGIN, 6.28, self.W - 2 * T.R_MARGIN, 0.45, "middle")
+        """页底关键结论：黑色粗体（MIT 范例第 4、13 页）。"""
+        tf = _box(s, T.R_MARGIN, 6.27, self.W - 2 * T.R_MARGIN, 0.5, "middle")
         tf.paragraphs[0].alignment = PP_ALIGN.CENTER
         _rich(tf.paragraphs[0], text, T.R_SIZE_NOTE, T.R_INK, True)
 
     def _refs(self, s, refs):
+        """参考文献 / 出处：放在页脚条左侧（MIT 范例第 3 页）。"""
         refs = refs if isinstance(refs, list) else [refs]
-        tf = _box(s, T.R_MARGIN, self.H - 0.72 - 0.16 * (len(refs) - 1), self.W - 2 * T.R_MARGIN - 2.2, 0.3)
+        n = len(refs)
+        tf = _box(s, 0.25, T.R_FOOT_Y + 0.04, 5.6, T.R_FOOT_H - 0.08, "middle")
         for k, r in enumerate(refs):
             p = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
-            _rich(p, r, T.R_SIZE_REF, T.R_FAINT)
+            _rich(p, r, T.R_SIZE_REF if n == 1 else Pt(9), T.R_INK)
 
     @staticmethod
     def _notes(s, notes):

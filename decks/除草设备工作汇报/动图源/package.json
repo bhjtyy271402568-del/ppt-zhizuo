@@ -3,6 +3,7 @@
   "private": true,
   "description": "除草设备汇报动图：SVG 逐帧渲染（Chromium）+ ffmpeg 合成 GIF",
   "dependencies": {
-    "@fontsource/noto-sans-sc": "5.2.5"
+    "@fontsource/noto-sans-sc": "5.2.5",
+    "three": "^0.160.0"
   }
 }

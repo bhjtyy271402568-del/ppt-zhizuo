@@ -9,8 +9,8 @@ const OPT = JSON.parse(fs.readFileSync(path.join(__dirname, "../工具/光学计
 
 // ---------------- 配色（和 PPT 主题一致） ----------------
 const C = {
-  ink: "#20252C",      // 主要文字、轮廓
-  mid: "#5A6370",      // 次要文字
+  ink: "#111111",      // 主要文字、轮廓（和 PPT 正文一样用黑色）
+  mid: "#444444",      // 次要文字
   faint: "#9AA3AE",    // 辅助线
   rule: "#D9DEE4",     // 网格、地面填充
   glass: "#E6EFF8",    // 镜片填充
@@ -73,7 +73,7 @@ function label(x1, y1, x2, y2, s, o = {}) {
   const anchor = o.anchor || (x2 >= x1 ? "start" : "end");
   const tx = x2 + (anchor === "start" ? 4 : anchor === "end" ? -4 : 0);
   return line(x1, y1, x2, y2, { c: C.faint, w: 0.9 }) + circle(x1, y1, 1.6, { fill: C.faint }) +
-    text(tx, y2 + 5, s, { size: o.size || 14, c: o.c || C.mid, anchor, weight: o.weight });
+    text(tx, y2 + 6, s, { size: o.size || 19, c: o.c || C.ink, anchor, weight: o.weight });
 }
 
 // 箭头（实心三角头）
@@ -90,7 +90,7 @@ function dim(x1, y1, x2, y2, s, o = {}) {
   const c = o.c || C.mid;
   const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
   return arrow(mx, my, x1, y1, { c, w: 0.9, head: 6 }) + arrow(mx, my, x2, y2, { c, w: 0.9, head: 6 }) +
-    (s ? text(mx + (o.dx || 0), my + (o.dy || -6), s, { size: o.size || 13, c, anchor: "middle" }) : "");
+    (s ? text(mx + (o.dx || 0), my + (o.dy || -7), s, { size: o.size || 17, c, anchor: "middle" }) : "");
 }
 
 // 透镜截面（双凸 / 平凸 / 双凹），中心 (x,y)，光轴方向角 ang（弧度），口径 h，中心厚 t

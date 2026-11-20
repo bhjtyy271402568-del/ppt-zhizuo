@@ -33,13 +33,20 @@ function band(x0, z0, dx, dz, len, wOf, n = 40) {
 function ground() {
   let g = L.line(px(-300), pz(HW), px(300), pz(HW), { c: C.ink, w: 1.6 });
   for (let x = -296; x <= 300; x += 12) g += L.line(px(x), pz(HW) + 1, px(x - 9), pz(HW) + 10, { c: C.faint, w: 0.8 });
-  return g + L.text(px(-300), pz(HW) + 34, "作业面（地面）", { size: 14, c: C.mid });
+  // 尺寸线：振镜到地面 650 mm；作业幅面 350 mm
+  g += L.line(px(-262), pz(0), px(-240), pz(0), { c: C.faint, w: 0.9 });
+  g += L.dim(px(-252), pz(0), px(-252), pz(HW), "", { c: C.ink });
+  g += L.text(px(-246), pz(HW / 2) + 7, `${HW} mm`, { size: 19, c: C.ink });
+  g += L.line(px(-175), pz(HW) + 14, px(-175), pz(HW) + 58, { c: C.faint, w: 0.9 });
+  g += L.line(px(175), pz(HW) + 14, px(175), pz(HW) + 58, { c: C.faint, w: 0.9 });
+  g += L.dim(px(-175), pz(HW) + 50, px(175), pz(HW) + 50, "作业幅面 350 mm", { size: 19, c: C.ink, dy: 26 });
+  return g;
 }
 
 function fiberAndCollimator(xLens) {
   // 光纤接头 + 准直镜筒（简化外形），镜筒右端就是准直镜
   const x1 = px(xLens - 46), y = pz(0);
-  let g = `<path d="M 30 ${y + 70} C 90 ${y + 70}, 120 ${y}, ${x1 - 18} ${y}" fill="none" stroke="${C.metal}" stroke-width="3"/>`;
+  let g = `<path d="M ${px(-228)} ${y + 64} C ${px(-215)} ${y + 20}, ${x1 - 60} ${y}, ${x1 - 18} ${y}" fill="none" stroke="${C.metal}" stroke-width="3"/>`;
   g += L.rect(x1 - 20, y - 6, 20, 12, { fill: C.metalDark });                       // SMA 接头
   g += L.rect(x1, y - 12, px(xLens) - x1, 24, { fill: "#EEF1F4", c: C.metalDark, w: 1.2 }); // 镜筒
   g += L.lensShape(px(xLens) - 4, y, 20, 6, "plano", 0);
@@ -51,8 +58,13 @@ function mirror(phi) {
   const dox = Math.sin(phi), doz = Math.cos(phi);
   let nx = dox - 1, nz = doz; const n = Math.hypot(nx, nz); nx /= n; nz /= n;
   const tx = -nz, tz = nx, h = 15;                                // 镜面方向，半长 15 mm
-  let g = L.line(px(-tx * h), pz(-tz * h), px(tx * h), pz(tz * h), { c: C.ink, w: 4, cap: "round" });
-  g += L.circle(px(0), pz(0), 3.2, { fill: C.bg, c: C.ink, w: 1.2 });
+  // 电机：侧视时转轴垂直纸面，画成圆；镜片装在轴上
+  let g = L.circle(px(0), pz(0), 15, { fill: "#3B4048" });
+  const ox = -nx * 1.2, oz = -nz * 1.2;
+  g += L.poly([[px(-tx * h + ox), pz(-tz * h + oz)], [px(tx * h + ox), pz(tz * h + oz)],
+               [px(tx * h - ox * 1.6), pz(tz * h - oz * 1.6)], [px(-tx * h - ox * 1.6), pz(-tz * h - oz * 1.6)]],
+              { fill: "#E9EEF3", c: "#555", w: 1.2 });
+  g += L.circle(px(0), pz(0), 2.6, { fill: "#555" });
   // 转动方向提示（固定的小圆弧箭头）
   g += `<path d="M ${px(-22)} ${pz(-24)} A 32 32 0 0 1 ${px(18)} ${pz(-28)}" fill="none" stroke="${C.faint}" stroke-width="1"/>`;
   g += L.arrow(px(14), pz(-29.5), px(19), pz(-27.5), { c: C.faint, w: 1, head: 6 });
@@ -61,30 +73,30 @@ function mirror(phi) {
 
 function spotInset(dmm, sub) {
   // 光斑截面（统一放大比例，便于三张图对比）
-  const cx0 = 735, cy0 = 470, k = 4.2;                            // px/mm
-  let g = L.text(cx0, cy0 - 92, "地面光斑", { size: 14, c: C.mid, anchor: "middle" });
+  const cx0 = 712, cy0 = 470, k = 4.2;                            // px/mm
+  let g = L.text(cx0, cy0 - 92, "地面光斑", { size: 19, c: C.ink, anchor: "middle" });
   g += L.circle(cx0, cy0, 70, { c: C.rule, w: 1, fill: "#FAFBFC" });
   g += L.circle(cx0, cy0, (dmm * k) / 2, { fill: "rgba(208,38,58,0.55)", c: C.beam, w: 1 });
   g += L.line(cx0 - 21, cy0 + 84, cx0 + 21, cy0 + 84, { c: C.mid, w: 1.4 });
-  g += L.text(cx0, cy0 + 100, "10 mm", { size: 12, c: C.mid, anchor: "middle" });
-  g += L.text(cx0, cy0 + 130, `${dmm.toFixed(1)} mm`, { size: 22, weight: 500, c: C.beam, anchor: "middle" });
-  if (sub) g += L.text(cx0, cy0 + 152, sub, { size: 13, c: C.mid, anchor: "middle" });
+  g += L.text(cx0, cy0 + 104, "10 mm", { size: 16, c: C.ink, anchor: "middle" });
+  g += L.text(cx0, cy0 + 140, `${dmm.toFixed(1)} mm`, { size: 28, weight: 500, c: C.beam, anchor: "middle" });
+  if (sub) g += L.text(cx0, cy0 + 168, sub, { size: 17, c: C.ink, anchor: "middle" });
   return g;
 }
 
 function hud(phi, xHit) {
   const t = phi * 90 / Math.PI;                                   // 镜片机械转角 = 光学角 / 2
   const sg = (v, n = 1) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(n);
-  return L.text(612, 40, `振镜转角 θ = ${sg(t)}°`, { size: 15, c: C.ink }) +
-    L.text(612, 63, `光束偏转 2θ = ${sg(2 * t)}°`, { size: 15, c: C.ink }) +
-    L.text(612, 86, `落点 x = ${sg(xHit, 0)} mm`, { size: 15, c: C.ink });
+  return L.text(600, 44, `振镜转角 θ = ${sg(t)}°`, { size: 20, c: C.ink }) +
+    L.text(600, 74, `光束偏转 2θ = ${sg(2 * t)}°`, { size: 20, c: C.ink }) +
+    L.text(600, 104, `落点 x = ${sg(xHit, 0)} mm`, { size: 20, c: C.ink });
 }
 
 module.exports = function (mode) {
   const frames = 80, fps = 20;
   return {
     name: { parallel: "光路_平行光", post: "光路_后聚焦", pre: "光路_前聚焦" }[mode],
-    width: W, height: H, fps, frames, still: 14,
+    width: W, height: H, fps, frames, offset: 12,
     frame(i) {
       const phi = PHI_MAX * Math.sin((2 * Math.PI * i) / frames);
       const dx = Math.sin(phi), dz = Math.cos(phi);
@@ -97,7 +109,7 @@ module.exports = function (mode) {
         g += band(0, 0, dx, dz, len, (s) => L.qW(L.qProp(qColl, A_IN + s)));
         xHit = HW * Math.tan(phi);
         spot = 2 * L.qW(L.qProp(qColl, A_IN + len));
-        sub = "准直光，几乎不随高度变化";
+        sub = "几乎不随高度变化";
         g += L.label(px(-A_IN) - 10, pz(0) + 12, px(-A_IN) - 40, pz(0) + 70, "单镜片准直", { anchor: "end" });
       }
 
@@ -113,11 +125,12 @@ module.exports = function (mode) {
         const w0 = OPT["后聚焦"]["焦点光斑_mm"] / 2, zr = OPT["后聚焦"]["瑞利长度_mm"];
         g += band(xe, zl2, ex / len, ez / len, len, (s) => w0 * Math.sqrt(1 + ((s - len) / zr) ** 2));
         // 场镜（两片），画在光束之上
+        g += L.rect(px(-74), pz(zl - 8), S * 148, S * (zl2 - zl + 14), { fill: "rgba(80,86,94,0.08)", c: C.metalDark, w: 1.3 });
         g += L.lensShape(px(0), pz(zl + 5), S * 128, S * 10, "convex", Math.PI / 2);
         g += L.lensShape(px(0), pz(zl2 - 6), S * 138, S * 12, "convex", Math.PI / 2);
-        g += L.label(px(64), pz(zl + 8), px(130), pz(zl + 8), `F-θ 场镜  f = ${F_THETA} mm`);
+        g += L.label(px(74), pz(zl + 12), px(118), pz(zl + 12), `F-θ 场镜 f ${F_THETA} mm`);
         spot = 2 * w0;
-        sub = "x = f·θ，焦点始终落在平面上";
+        sub = "焦点始终在平面上";
       }
 
       if (mode === "pre") {
@@ -137,16 +150,16 @@ module.exports = function (mode) {
         for (let k = 0; k <= 60; k++) { const t = -a + (2 * a * k) / 60; arcPts.push([px(R * Math.sin(t)), pz(R * Math.cos(t))]); }
         g += L.pline(arcPts, { c: C.glassLine, w: 1.2, dash: "6 4" });
         g += L.circle(px(R * dx), pz(R * dz), 3.2, { fill: C.glassLine });
-        g += L.text(px(-185), pz(R) - 52, "焦点轨迹：半径 650 mm 的圆弧", { size: 14, c: C.glassLine });
+        g += L.text(px(-205), pz(R) - 56, "焦点轨迹：半径 650 mm 的圆弧", { size: 18, c: C.glassLine });
         // 边缘离焦标注（固定在 +φmax 处）
         const xe = R * Math.sin(PHI_MAX), ze = R * Math.cos(PHI_MAX);
         g += L.line(px(xe) + 8, pz(ze), px(xe) + 40, pz(ze), { c: C.faint, w: 0.8 });
         g += L.line(px(HW * Math.tan(PHI_MAX)) + 6, pz(HW), px(xe) + 40, pz(HW), { c: C.faint, w: 0.8 });
         g += L.dim(px(xe) + 34, pz(ze), px(xe) + 34, pz(HW), "", { c: C.mid });
-        g += L.text(px(xe) + 44, (pz(ze) + pz(HW)) / 2 + 5, `离焦 ${OPT["前聚焦"]["边缘离焦_mm"].toFixed(0)} mm`, { size: 13, c: C.mid });
+        g += L.text(px(xe) + 44, (pz(ze) + pz(HW)) / 2 + 6, `离焦 ${OPT["前聚焦"]["边缘离焦_mm"].toFixed(0)} mm`, { size: 17, c: C.ink });
         xHit = HW * Math.tan(phi);
         spot = 2 * L.qW(L.qProp(qL, A_IN + len));
-        sub = `焦深 ±${OPT["前聚焦"]["焦深_±mm"].toFixed(0)} mm，边缘只增大 ${OPT["前聚焦"]["边缘光斑增大_%"].toFixed(1)}%`;
+        sub = `边缘只增大 ${OPT["前聚焦"]["边缘光斑增大_%"].toFixed(1)}%`;
       }
 
       g += mirror(phi);

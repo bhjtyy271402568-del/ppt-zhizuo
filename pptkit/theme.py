@@ -48,28 +48,33 @@ BODY_BOTTOM = Emu(6250000) # 页脚上方
 
 
 # ====================================================================
-# 工程汇报风格（meta.style: report）
-# 参考 MIT 航空航天系会议报告：白底、标题下一条细线、图占主体，
-# 只用一个强调色（激光红）标关键数字；不用色块卡片、大号章节编号。
+# 工程汇报风格（meta.style: report）：照 MIT 航空航天系会议报告的模板
+# 尺寸和颜色从那份 PDF 上量取：顶部 0.08 in 红条 + 灰色标题条（白字）+ 0.07 in 红线；
+# 底部渐变灰页脚条，页码红色居中偏左，校徽贴在页脚右侧，参考文献在页脚左侧。
 # ====================================================================
-R_INK = RGBColor(0x1B, 0x24, 0x33)       # 标题、正文
-R_MID = RGBColor(0x5A, 0x63, 0x70)       # 次要文字、图注
-R_FAINT = RGBColor(0x98, 0xA1, 0xAC)     # 页脚、引线
-R_RULE = RGBColor(0xCB, 0xD2, 0xDA)      # 细线
-R_ACCENT = RGBColor(0xC8, 0x10, 0x2E)    # 激光红：关键数字、结论
-R_BLUE = RGBColor(0x2F, 0x5D, 0x93)      # 光学元件、第二层强调
-R_PANEL = RGBColor(0xF4, 0xF6, 0xF8)     # 极浅底（占位框、少量分区）
+R_INK = RGBColor(0x11, 0x11, 0x11)       # 正文（MIT 用黑色，不用灰）
+R_MID = RGBColor(0x40, 0x40, 0x40)       # 少量次要文字
+R_FAINT = RGBColor(0x8C, 0x8C, 0x8C)     # 引线、占位框
+R_RULE = RGBColor(0xBF, 0xBF, 0xBF)
+R_ACCENT = RGBColor(0xA6, 0x01, 0x1C)    # MIT 红：标题条红线、页码、图上红色标注
+R_COVER_RED = RGBColor(0xC0, 0x00, 0x00) # 封面红线
+R_BAND = RGBColor(0x8A, 0x8B, 0x8C)      # 标题灰条
+R_COVER_BAND = RGBColor(0x7F, 0x7F, 0x7F)
+R_BLUE = RGBColor(0x1F, 0x4E, 0x9A)      # 图上蓝色标注
+R_GREEN = RGBColor(0x1B, 0x7F, 0x3B)
+R_PANEL = RGBColor(0xF2, 0xF2, 0xF2)     # 占位框底色
 
 R_MARGIN = 0.55                          # 英寸
-R_KICKER_Y, R_TITLE_Y, R_RULE_Y = 0.30, 0.50, 1.08
-R_BODY_TOP, R_BODY_BOTTOM = 1.30, 6.75
+R_TOP_BAR, R_BAND_BOTTOM, R_RED_LINE = 0.08, 0.96, 0.07
+R_TITLE_X = 0.96
+R_FOOT_Y, R_FOOT_H = 6.86, 0.55
+R_BODY_TOP, R_BODY_BOTTOM = 1.25, 6.75
 
-R_SIZE_KICKER = Pt(11)
-R_SIZE_TITLE = Pt(24)
-R_SIZE_BODY = Pt(16)
-R_SIZE_SMALL = Pt(13)
-R_SIZE_CAPTION = Pt(11)
-R_SIZE_LABEL = Pt(12)
-R_SIZE_NOTE = Pt(16)
-R_SIZE_REF = Pt(9)
-R_SIZE_FOOTER = Pt(9)
+R_SIZE_TITLE = Pt(28)
+R_SIZE_BODY = Pt(18)
+R_SIZE_SMALL = Pt(14)
+R_SIZE_CAPTION = Pt(13)
+R_SIZE_LABEL = Pt(14)
+R_SIZE_NOTE = Pt(18)
+R_SIZE_REF = Pt(10)
+R_SIZE_PAGE = Pt(16)

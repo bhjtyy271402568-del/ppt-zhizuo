@@ -17,7 +17,9 @@ async function main() {
   const tmp = fs.mkdtempSync(path.join(require("os").tmpdir(), "anim-"));
 
   const svgs = [];
-  for (let i = 0; i < frames; i++) svgs.push(anim.frame(i, frames));
+  // offset：让 GIF 第一帧落在有代表性的画面上（导出 PDF、缩略图显示的就是第一帧）
+  const off = anim.offset || 0;
+  for (let i = 0; i < frames; i++) svgs.push(anim.frame((i + off) % frames, frames));
 
   // 先把所有用到的字放进隐藏层，等字体子集全部加载完再截图
   const allText = [...new Set(svgs.join("").match(/>([^<>]+)</g)?.join("") || "")].join("");
@@ -47,7 +49,7 @@ async function main() {
   fs.mkdirSync(outDir, { recursive: true });
   const gif = path.join(outDir, `${name}.gif`);
   const still = path.join(outDir, `${name}_静帧.png`);
-  const stillIdx = anim.still ?? Math.floor(frames * 0.3);
+  const stillIdx = 0;
   fs.copyFileSync(path.join(tmp, `f${String(stillIdx).padStart(4, "0")}.png`), still);
   // 两遍调色板：先统计全部帧的颜色，再按这套调色板编码，细线和半透明光束才不会发花
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(fps), "-i", path.join(tmp, "f%04d.png"),

@@ -45,6 +45,20 @@ for (let i = 0; i < 2 * FR; i++) {
   }
 }
 
+function weeds(t) {
+  let g = "";
+  for (let k = -3; k <= 3; k++) {
+    let x = ((k * 230 - V * t) % 1610 + 1610) % 1610 - 805 + 40;
+    if (x < -540 || x > 500) continue;
+    const yb = sy(ground(x, t));
+    for (let j = -2; j <= 2; j++) {
+      const a = j * 0.45, len = 16 + (2 - Math.abs(j)) * 6;
+      g += `<path d="M ${sx(x)} ${yb} q ${Math.sin(a) * len * 0.5} ${-len * 0.6} ${Math.sin(a) * len} ${-len * Math.cos(a)}" stroke="#4F8A2E" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+    }
+  }
+  return g;
+}
+
 function soil(t) {
   const top = [];
   for (let x = -560; x <= 520; x += 6) top.push([sx(x), sy(ground(x, t))]);
@@ -53,27 +67,29 @@ function soil(t) {
 }
 
 module.exports = {
-  name: "原理_Z轴测距聚焦", width: W, height: H, fps: FPS, frames: FR, still: 30, colors: 160,
+  name: "原理_Z轴测距聚焦", width: W, height: H, fps: FPS, frames: FR, offset: 30, colors: 160,
   frame(i) {
     const r = rec[i];
     const zh = r.zh, tt = r.t;
-    let g = soil(tt);
+    let g = soil(tt) + weeds(tt);
     // Z 轴立柱 + 滑台
     const colX = sx(-D - 120);
-    g += L.rect(colX - 12, 30, 24, sy(F - 90) - 30, { fill: "#EEF1F4", c: C.metalDark, w: 1.2 });
+    g += L.rect(colX - 14, 46, 28, sy(F - 90) - 46, { fill: "#EEF1F4", c: C.metalDark, w: 1.2 });          // 立柱
+    for (let yy = 52; yy < sy(F - 90) - 6; yy += 7) g += L.line(colX - 4, yy, colX + 4, yy + 4, { c: C.faint, w: 0.8 }); // 丝杆
     g += L.rect(colX - 26, 18, 52, 26, { fill: "#E3E7EC", c: C.metalDark, w: 1.2 });
-    g += L.text(colX, 36, "Z 电机", { size: 12, c: C.mid, anchor: "middle" });
+    g += L.text(colX, 37, "Z 电机", { size: 16, c: C.ink, anchor: "middle" });
     // 激光头（随 zh 上下）
     const yh = sy(zh);
-    g += L.rect(colX + 12, yh - 104, sx(40) - colX - 12, 16, { fill: "#D5DBE2", c: C.metalDark, w: 1 });     // 横梁
+    g += L.rect(colX - 20, yh - 124, 40, 44, { fill: "#D3D8DE", c: C.metalDark, w: 1.2 });                 // 滑块
+    g += L.rect(colX + 20, yh - 110, sx(-34) - colX - 20, 16, { fill: "#D5DBE2", c: C.metalDark, w: 1 });   // 横梁
     g += L.rect(sx(-34), yh - 120, S * 68, 84, { fill: "#E3E7EC", c: C.metalDark, w: 1.2 });               // 头部
     g += L.rect(sx(-14), yh - 36, S * 28, 36, { fill: "#D5DBE2", c: C.metalDark, w: 1.2 });                // 镜筒
-    g += L.text(sx(0), yh - 74, "激光头", { size: 13, c: C.ink, anchor: "middle" });
+    g += L.text(sx(0), yh - 72, "激光头", { size: 17, c: C.ink, anchor: "middle" });
     // 传感器（与镜筒下端同高，在左侧 D 处）
     const xs = sx(-D), ys = yh;
     g += L.rect(xs, yh - 46, sx(-34) - xs, 9, { fill: "#D5DBE2", c: C.metalDark, w: 1 });                  // 传感器支架
     g += `<rect x="${xs - 12}" y="${ys - 30}" width="24" height="30" fill="#F4E9D2" stroke="#9A7420" stroke-width="1.2" transform="rotate(${-BETA * 180 / Math.PI} ${xs} ${ys})"/>`;
-    g += L.text(xs - 20, ys - 34, "测距传感器", { size: 13, c: "#8A6A1E", anchor: "end" });
+    g += L.text(xs - 22, ys - 34, "测距传感器", { size: 19, c: "#8A6A1E", anchor: "end" });
     // 激光：从镜筒会聚到焦点 F，再到地面
     const yFocus = sy(zh - F), yG = sy(ground(0, tt));
     g += L.poly([[sx(-9), yh], [sx(9), yh], [sx(0) + 1.2, yFocus], [sx(0) - 1.2, yFocus]], { fill: C.beamFill, c: C.beam, w: 0.8 });
@@ -88,39 +104,39 @@ module.exports = {
     g += L.circle(sx(xh), sy(zhit), 3.2, { fill: "#B7791F" });
     // 焦平面参考线 + 尺寸
     g += L.line(sx(-60), yFocus, sx(70), yFocus, { c: C.glassLine, w: 1, dash: "4 3" });
-    g += L.text(sx(-64), yFocus + 4, "焦平面", { size: 12, c: C.glassLine, anchor: "end" });
+    g += L.text(sx(-64), yFocus + 6, "焦平面", { size: 17, c: C.glassLine, anchor: "end" });
     g += L.dim(sx(150), yh, sx(150), yG, "", { c: C.mid });
     g += L.line(sx(12), yh, sx(156), yh, { c: C.faint, w: 0.8 }) + L.line(sx(6), yG, sx(156), yG, { c: C.faint, w: 0.8 });
-    g += L.text(sx(158), (yh + yG) / 2 + 5, "H", { size: 16, c: C.ink, weight: 500 });
+    g += L.text(sx(160), (yh + yG) / 2 + 8, "H", { size: 22, c: C.ink, weight: 500 });
     g += L.label((xs + sx(xh)) / 2 - 2, (ys + sy(zhit)) / 2, (xs + sx(xh)) / 2 - 60, (ys + sy(zhit)) / 2 + 30, "斜距 L", { anchor: "end", c: "#8A6A1E" });
     // β 角
     g += `<path d="M ${xs} ${ys + 46} A 46 46 0 0 0 ${xs + 46 * Math.sin(BETA)} ${ys + 46 * Math.cos(BETA)}" fill="none" stroke="#9A7420" stroke-width="1"/>`;
     g += L.line(xs, ys, xs, ys + 60, { c: C.faint, w: 0.8, dash: "3 3" });
-    g += L.text(xs + 8, ys + 66, "β", { size: 14, c: "#8A6A1E" });
-    g += L.text(sx(-520), H - 30, "设备行进方向 →　（地面相对向左移动）", { size: 13, c: C.mid });
+    g += L.text(xs + 8, ys + 70, "β", { size: 20, c: "#8A6A1E" });
+    g += L.text(sx(-520), H - 28, "设备行进方向 →（地面相对向左移动）", { size: 17, c: C.ink });
 
     // 右侧读数
-    const px0 = 830; let y = 80;
+    const px0 = 820; let y = 86;
     const delta = r.Hm - F;
-    g += L.text(px0, y, "H = L · cos β", { size: 24, c: C.ink, weight: 500 }); y += 30;
-    g += L.text(px0, y, "β：传感器安装倾角（固定）", { size: 13, c: C.mid }); y += 50;
-    g += L.text(px0, y, `测得斜距 L　${r.Ls.toFixed(1)} mm`, { size: 16, c: C.ink }); y += 30;
-    g += L.text(px0, y, `换算高度 H　${r.Hm.toFixed(1)} mm`, { size: 16, c: C.ink }); y += 30;
-    g += L.text(px0, y, `焦距 F　　　${F.toFixed(0)} mm`, { size: 16, c: C.ink }); y += 40;
+    g += L.text(px0, y, "H = L · cos β", { size: 32, c: C.ink, weight: 500 }); y += 36;
+    g += L.text(px0, y, "β：传感器安装倾角（固定）", { size: 18, c: C.ink }); y += 56;
+    g += L.text(px0, y, `测得斜距 L　${r.Ls.toFixed(1)} mm`, { size: 21, c: C.ink }); y += 36;
+    g += L.text(px0, y, `换算高度 H　${r.Hm.toFixed(1)} mm`, { size: 21, c: C.ink }); y += 36;
+    g += L.text(px0, y, `焦距 F　　　${F.toFixed(0)} mm`, { size: 21, c: C.ink }); y += 48;
     const act = Math.abs(delta) < 0.5 ? "在焦点上" : delta > 0 ? "离得太远 → Z 轴下降" : "离得太近 → Z 轴上升";
-    g += L.text(px0, y, `Δ = H − F = ${delta >= 0 ? "+" : "−"}${Math.abs(delta).toFixed(1)} mm`, { size: 20, c: C.beam, weight: 500 }); y += 28;
-    g += L.text(px0, y, act, { size: 15, c: C.ink }); y += 40;
+    g += L.text(px0, y, `Δ = H − F = ${delta >= 0 ? "+" : "−"}${Math.abs(delta).toFixed(1)} mm`, { size: 25, c: C.beam, weight: 500 }); y += 34;
+    g += L.text(px0, y, act, { size: 20, c: C.ink }); y += 46;
     // Δ 指示条
     const bx = px0, bw = 320, by = y;
     g += L.line(bx, by, bx + bw, by, { c: C.rule, w: 6, cap: "round" });
     g += L.line(bx + bw / 2, by - 10, bx + bw / 2, by + 10, { c: C.mid, w: 1 });
     const kx = L.clamp(delta / 40, -1, 1) * bw / 2;
     g += L.circle(bx + bw / 2 + kx, by, 7, { fill: C.beam });
-    g += L.text(bx, by + 26, "−40", { size: 12, c: C.mid }) + L.text(bx + bw, by + 26, "+40 mm", { size: 12, c: C.mid, anchor: "end" });
+    g += L.text(bx, by + 28, "−40", { size: 16, c: C.ink }) + L.text(bx + bw, by + 28, "+40 mm", { size: 16, c: C.ink, anchor: "end" });
     y += 80;
-    g += L.text(px0, y, "测距光点与激光点只在 H = F 时重合；", { size: 13, c: C.mid }); y += 22;
-    g += L.text(px0, y, "闭环把 Δ 压到 0，两点就重合在焦点上。", { size: 13, c: C.mid }); y += 34;
-    g += L.text(px0, y, `示意尺寸：D = ${D} mm，F = ${F} mm，β = ${(BETA * 180 / Math.PI).toFixed(1)}°`, { size: 12, c: C.faint });
+    g += L.text(px0, y, "测距光点与激光点只在 H = F 时重合；", { size: 17, c: C.ink }); y += 28;
+    g += L.text(px0, y, "闭环把 Δ 压到 0，两点重合在焦点上。", { size: 17, c: C.ink }); y += 40;
+    g += L.text(px0, y, `示意尺寸：D = ${D} mm，F = ${F} mm，β = ${(BETA * 180 / Math.PI).toFixed(1)}°`, { size: 15, c: C.mid });
     return L.svg(W, H, g);
   },
 };
