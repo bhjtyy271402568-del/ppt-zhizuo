@@ -1,0 +1,68 @@
+# ============================================================
+# 这里只写内容，样式（颜色、字体、位置）全在 pptkit/theme.py 里。
+# 每一页是 slides 下的一项，用 layout 选版式。
+# 文字里用 **两对星号** 包住的部分会变成橙色加粗，适合标关键数字。
+# 每页都可以加 notes: 演讲者备注（放映时只有你自己看得到）。
+# 图片、视频放在本文件夹的 assets/ 里，路径写成 assets/xxx.png。
+# ============================================================
+
+meta:
+  title: "{{标题}}"
+  footer: "{{标题}}"      # 每页左下角的文字，可以改短一点
+  # output: 文件名        # 不写就用 title
+
+slides:
+  - layout: cover
+    title: "{{标题}}"
+    subtitle: 副标题
+    author: 汇报人：
+    org: 单位
+    date: 2026 年 月 日
+
+  - layout: section
+    number: 1
+    title: 研究背景
+
+  - layout: bullets
+    title: 页面标题
+    items:
+      - 一级要点
+      - 带子要点的一级要点:
+          - 二级要点
+          - 二级要点
+    note: 这一页的结论（可选，显示在页面底部）
+    notes: |
+      讲这一页时要说的话。
+
+  # ---------- 其他版式，用的时候去掉行首的 # ----------
+  # - layout: image
+  #   title: 图片页
+  #   image: assets/图片.png
+  #   caption: 图 1 图注
+  #   bullets:              # 写了 bullets 就是左图右文，不写就是整页大图
+  #     - 说明
+
+  # - layout: two_column
+  #   title: 对比页
+  #   left:
+  #     heading: 方案 A
+  #     items: [优点, 缺点]
+  #   right:
+  #     heading: 方案 B
+  #     image: assets/b.png  # 一栏可以放 items 或 image
+  #     caption: 图注
+
+  # - layout: table
+  #   title: 表格页
+  #   col_widths: [2, 1, 1]  # 列宽比例，可选
+  #   rows:
+  #     - [参数, 数值, 单位]  # 第一行是表头
+  #     - [波长, 1064, nm]
+  #   caption: 表 1 说明
+
+  # - layout: video
+  #   title: 视频页
+  #   video: assets/动画.mp4  # 只支持 mp4；封面帧会自动从视频里截
+  #   caption: 视频说明
+
+  - layout: end

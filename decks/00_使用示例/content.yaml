@@ -1,0 +1,93 @@
+# 示例 deck：把每种版式都用一遍，同时讲清楚这个仓库怎么用。
+# 生成：python build.py decks/00_使用示例 --preview
+
+meta:
+  title: PPT 制作仓库使用示例
+  footer: ppt-zhizuo · 使用示例
+
+slides:
+  - layout: cover
+    title: 用脚本做汇报 PPT
+    subtitle: 内容写在 YAML 里，样式统一由代码管理
+    author: 汇报人：××
+    org: ××大学 ××学院
+    date: 2026 年 11 月
+    notes: 封面页。author / org / date 三行都是可选的。
+
+  - layout: section
+    number: 1
+    title: 为什么用脚本做 PPT
+    subtitle: 内容与样式分离
+
+  - layout: bullets
+    title: 手工排版常见的三个问题
+    items:
+      - 每页字体、字号、颜色不一致，越改越乱
+      - 改一次配色要逐页手动调:
+          - 30 页的汇报，光改标题颜色就要点 30 次
+          - 很容易漏掉一两页
+      - 同一组数据在多份 PPT 里各写一遍，**改了一处忘了另一处**
+    note: 解决思路：内容只写一次，样式只定义一次
+    notes: |
+      这一页用的是 bullets 版式。
+      写了 note 就会在底部出现橙色结论条。
+
+  - layout: image
+    title: 工作流程
+    image: assets/workflow.png
+    caption: 图 1　content.yaml 负责“说什么”，theme.py 负责“长什么样”
+    notes: image 版式不写 bullets 时，图片按原比例铺满内容区。
+
+  - layout: image
+    title: 左图右文
+    image: assets/workflow.png
+    caption: 图 2　同一张图，加上 bullets 就变成左图右文
+    bullets:
+      - 图片按原比例缩放，不会被拉变形
+      - 右侧要点字号自动调小一档
+      - 适合“结构图 + 说明”的页面
+
+  - layout: section
+    number: 2
+    title: 版式一览
+
+  - layout: table
+    title: 八种版式和必填字段
+    col_widths: [1.2, 2.2, 2]
+    rows:
+      - [layout, 用途, 必填字段]
+      - [cover, 封面, title]
+      - [section, 章节过渡页, title]
+      - [bullets, 要点列表, "title, items"]
+      - [image, 大图 / 左图右文, "title, image"]
+      - [two_column, 左右对比, "title, left, right"]
+      - [table, 表格, "title, rows"]
+      - [video, 嵌入 MP4 视频, "title, video"]
+      - [end, 结束页, 无]
+    caption: 表 1　所有版式都可以加 notes（演讲者备注）
+
+  - layout: two_column
+    title: 手工排版 vs 脚本生成
+    left:
+      heading: 手工排版
+      items:
+        - 所见即所得，上手快
+        - 样式散落在每一页
+        - 改版靠逐页修改
+    right:
+      heading: 脚本生成
+      items:
+        - 内容是纯文本，可以用 Git 记录每次修改
+        - 样式集中在 theme.py
+        - 改版只需**重新运行一次** build.py
+
+  - layout: bullets
+    title: 新建一份自己的 PPT
+    items:
+      - "第一步：python new_deck.py 动态聚焦_中期汇报"
+      - 第二步：编辑 decks/动态聚焦_中期汇报/content.yaml，图片放进 assets/
+      - "第三步：python build.py decks/动态聚焦_中期汇报 --preview"
+      - 成品在 output/ 里，用 PowerPoint 打开后还可以继续手动微调
+    note: 小改动直接在 PowerPoint 里调；要反复改的内容写进 YAML
+
+  - layout: end
