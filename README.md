@@ -88,6 +88,24 @@ slides:
 - 要点里有半角冒号加空格（如 `电压: 54.6 V`）时，YAML 会把它当成“键: 值”，脚本已经自动还原成原句；也可以用中文冒号“：”，或者给整句加引号。
 - 图片按原比例缩放，不会变形。原图分辨率建议宽度 ≥ 1600 px。
 
+## 工程汇报风格（style: report）
+
+在 `meta` 里写 `style: report`，换成参考 MIT 会议报告的版式：白底、标题下一条细线、图占主体，只用激光红标关键数字。内容页用 `canvas` 版式，每个元素按英寸坐标摆放（页面 13.333 × 7.5）：
+
+| 元素 type | 用途 | 主要字段 |
+|---|---|---|
+| `image` | 图片 / GIF 动图 | `src x y`，`w` 或 `h`（都写则按比例放进框里），`caption` |
+| `text` | 文字（可多行） | `x y w text size color bold align` |
+| `bullets` | 要点 | `x y w h items size` |
+| `table` | 三线表 / 无线参数表 | `x y w rows widths style(three_line/plain) highlight_rows` |
+| `label` | 图上标注，可带引线 | `x y text to:[x,y]` |
+| `arrow` | 流程箭头 | `from:[x,y] to:[x,y] text` |
+| `placeholder` | 待补内容的虚线框 | `x y w h title note` |
+| `chart` | 原生柱状图 / 折线图 | `kind categories series y_title` |
+| `rule` | 细分隔线 | `x y w h` |
+
+每页还可以写 `kicker`（标题上方的章节名）、`note`（页底关键结论）、`refs`（页底出处）、`notes`（讲稿）。另有 `cover`、`agenda`、`end` 三种整页版式。完整示例见 `decks/除草设备工作汇报/content.yaml`。
+
 ## 改样式
 
 全部在 `pptkit/theme.py`：

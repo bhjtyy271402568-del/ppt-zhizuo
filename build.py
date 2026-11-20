@@ -15,6 +15,7 @@ from pathlib import Path
 import yaml
 
 from pptkit import Deck
+from pptkit.report import ReportDeck
 
 LAYOUTS = {"cover", "section", "bullets", "image", "two_column", "table", "video", "end"}
 PATH_KEYS = {"image", "video", "poster"}  # 这些字段是文件路径，相对 deck 文件夹解析
@@ -59,9 +60,36 @@ def resolve(deck_dir: Path, spec: dict, where: str) -> dict:
     return spec
 
 
+REPORT_LAYOUTS = {"cover", "agenda", "canvas", "end"}
+
+
+def build_report(deck_dir: Path, cfg: dict) -> Path:
+    """工程汇报风格：canvas 自由排版，路径相对 deck 文件夹。"""
+    meta = cfg.get("meta", {})
+    title = meta.get("title", deck_dir.name)
+    deck = ReportDeck(footer=meta.get("footer", title), logo=meta.get("logo"), base=deck_dir)
+    for i, raw in enumerate(cfg.get("slides", []), start=1):
+        spec = dict(raw)
+        layout = spec.pop("layout", None)
+        if layout not in REPORT_LAYOUTS:
+            sys.exit(f"[错误] 第 {i} 页：report 风格的 layout 只能是 {', '.join(sorted(REPORT_LAYOUTS))}，收到 {layout!r}")
+        try:
+            getattr(deck, layout)(**spec)
+        except FileNotFoundError as e:
+            sys.exit(f"[错误] 第 {i} 页：找不到文件 {e.filename}")
+        except (TypeError, KeyError) as e:
+            sys.exit(f"[错误] 第 {i} 页（{layout}）字段不对：{e!r}")
+    out = deck_dir / "output" / f"{meta.get('output', title)}.pptx"
+    deck.save(out)
+    print(f"已生成 {out}（{len(deck.prs.slides)} 页）")
+    return out
+
+
 def build(deck_dir: Path) -> Path:
     cfg = yaml.safe_load((deck_dir / "content.yaml").read_text(encoding="utf-8"))
     meta = cfg.get("meta", {})
+    if meta.get("style") == "report":
+        return build_report(deck_dir, cfg)
     title = meta.get("title", deck_dir.name)
     deck = Deck(footer=meta.get("footer", title))
 

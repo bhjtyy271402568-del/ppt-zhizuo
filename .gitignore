@@ -7,3 +7,6 @@ __pycache__/
 
 # 预览图只用于检查，每次都能重新生成，不进仓库
 decks/*/output/preview/
+
+# 动图渲染依赖（npm install 重新装）
+node_modules/
