@@ -190,7 +190,7 @@ slides:
   - layout: canvas
     title: 三种扫描光路
     items:
-      - {type: image, src: assets/动图/光路_三种对比.gif, x: 0.55, y: 1.2, w: 12.23}
+      - {type: image, src: assets/动图/光路_三种对比.gif, x: 0.55, y: 1.2, w: 12.23, h: 5.6}
     refs: ["915 nm，芯径 155 μm、NA 0.22（M² ≈ 58）", "平行光、后聚焦按进振镜光束 12 mm 估算；前聚焦按 B 方案镜组计算"]
     notes: |
       三个面板是同一套几何：振镜在上，地面在下方 650 mm，振镜同步摆动，区别只在镜片放在哪里。
