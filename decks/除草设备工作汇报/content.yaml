@@ -1,7 +1,7 @@
 # 激光除草设备研制进展汇报（乙方 → 甲方）
 # 生成：python build.py decks/除草设备工作汇报 --preview
 # 版式照 MIT 航空航天系会议报告（灰色标题条 + 红线，渐变页脚 + 红色页码 + 校徽）。
-# 坐标单位：英寸；页面 13.333 × 7.5；正文区 y 1.25–6.75，页脚条从 6.86 开始。
+# 坐标单位：英寸；页面 13.333 × 7.5；正文区 y 1.30–6.65（左右边距 0.55），页脚条从 6.86 开始。
 # 数字来源：工具/光学计算.json、工具/动态聚焦追迹.json、工具/动态聚焦_真实镜组光斑.json、
 #   张道勇中期汇报、原理.pptx（刘瑞）、jiguangdongtaijujiao 仓库（Zemax 第 2 轮、Z 轴传动计算）
 
@@ -37,126 +37,71 @@ slides:
       - {type: image, src: assets/图/振镜与场镜.png, x: 10.25, y: 2.35, w: 2.45, caption: 振镜与 F-θ 场镜, cap_size: 14}
       - {type: label, x: 10.2, y: 3.45, text: "", w: 0.1, from: [10.2, 3.6], to: [6.85, 2.95]}
     notes: |
-      这是测试平台。激光泵浦和水冷、恒流驱动板、金橙子控制卡、振镜和深度相机都装在同一个铝型材框架上。右边是振镜和场镜的实物，场镜装在振镜下方。
-
-  - layout: canvas
-    title: 激光器、振镜、场镜与相机
-    items:
-      - {type: image, src: assets/图/器件_激光泵浦.png, x: 0.55, y: 1.35, w: 2.87, h: 1.85, valign: middle}
-      - {type: text, x: 0.55, y: 3.32, w: 2.87, text: 激光器（915 nm 泵浦源）, size: 16, bold: true}
-      - type: table
-        x: 0.55
-        y: 3.78
-        w: 2.87
-        style: plain
-        size: 14
-        row_h: 0.36
-        widths: [1.47, 1.40]
-        rows:
-          - [波长, 915 nm]
-          - [最大输出功率, 260 W]
-          - [芯径 / NA, 155 μm/0.22]
-          - [光纤接口, SMA905]
-          - [冷却, 定制水冷板]
-      - {type: image, src: assets/图/器件_振镜.png, x: 3.67, y: 1.35, w: 2.87, h: 1.85, valign: middle}
-      - {type: text, x: 3.67, y: 3.32, w: 2.87, text: 振镜 SS-2020, size: 16, bold: true}
-      - type: table
-        x: 3.67
-        y: 3.78
-        w: 2.87
-        style: plain
-        size: 14
-        row_h: 0.36
-        widths: [1.47, 1.40]
-        rows:
-          - [最大入射光斑, 20 mm]
-          - [扫描速度, 1.5 m/s]
-          - [定位速度, 5.0 m/s]
-          - [扫描角度, ±0.35 rad]
-          - [接口, XY2-100]
-      - {type: image, src: assets/图/器件_场镜.png, x: 6.79, y: 1.35, w: 2.87, h: 1.85, valign: middle}
-      - {type: text, x: 6.79, y: 3.32, w: 2.87, text: F-θ 场镜, size: 16, bold: true}
-      - type: table
-        x: 6.79
-        y: 3.78
-        w: 2.87
-        style: plain
-        size: 14
-        row_h: 0.36
-        widths: [1.47, 1.40]
-        rows:
-          - [焦距, 650 mm]
-          - [扫描范围, 350 × 350 mm]
-          - [最大入射光斑, 30 mm]
-          - [扫描角度, ±21°]
-      - {type: image, src: assets/图/器件_深度相机.png, x: 9.91, y: 1.35, w: 2.87, h: 1.85, valign: middle}
-      - {type: text, x: 9.91, y: 3.32, w: 2.87, text: 深度相机 D435i, size: 16, bold: true}
-      - type: table
-        x: 9.91
-        y: 3.78
-        w: 2.87
-        style: plain
-        size: 14
-        row_h: 0.36
-        widths: [1.47, 1.40]
-        rows:
-          - [RGB, 1920 × 1080]
-          - [深度, 1280 × 720]
-          - [测距范围, 0.3–3 m]
-          - [视场, 约 87° × 58°]
-    note: "光纤芯径 155 μm、NA 0.22，对应光束质量 M² ≈ 58，后面各光路的光斑大小都由它决定"
-    refs: "M² = π × 芯半径 × NA ÷ 波长"
-    notes: |
-      四个核心器件。要记住一个数：光纤芯径 155 μm、NA 0.22，对应 M² 约 58。后面讲光路时，光斑能做多小都由它决定。
+      这是测试平台。激光泵浦和水冷、恒流驱动板、金橙子控制卡、振镜和深度相机装在同一个铝型材框架上。右边是振镜和场镜的实物，场镜装在振镜下方。
 
   - layout: canvas
     title: 激光恒流驱动板
     items:
-      - {type: image, src: assets/图/驱动板_三维.jpg, x: 0.55, y: 1.35, w: 3.3, caption: 驱动板三维模型, cap_size: 14}
-      - {type: text, x: 4.2, y: 1.35, w: 4.6, text: "设计需求：", size: 18, bold: true}
-      - {type: text, x: 4.2, y: 1.78, w: 4.6, text: "36 V 输入，输出 18 A，电压上限约 29.2 V", size: 16}
-      - {type: text, x: 4.2, y: 2.55, w: 4.6, text: "方案：", size: 18, bold: true}
-      - type: bullets
-        x: 4.2
-        y: 2.95
-        w: 4.6
-        h: 3.2
-        size: 16
-        gap: 6
-        items:
-          - "LT3763 闭环恒流，STM32G431 给定电流"
-          - "2.5 mΩ 采样，DAC 调流，PWM 启停"
-          - "上下桥各两只 MOS 并联，电感 6.8 μH"
-          - "四层板，功率区与采样区分开"
-          - "软启动、欠压、限流、FAULT 关断"
-      - {type: text, x: 9.05, y: 1.35, w: 3.75, text: "电流设定链路：", size: 18, bold: true}
-      - type: text
-        x: 9.05
-        y: 1.85
+      # 左栏：三维模型 + 主要指标
+      - {type: image, src: assets/图/驱动板_三维.jpg, x: 0.55, y: 1.35, w: 3.75, h: 3.75, cap_box: true, caption: 驱动板三维模型, cap_size: 14}
+      - type: table
+        x: 0.55
+        y: 5.62
         w: 3.75
+        style: plain
         size: 15
-        spacing: 1.4
+        row_h: 0.34
+        widths: [1.75, 2.0]
+        rows:
+          - [输入电压, 36 V DC]
+          - [输出电流, 6–18 A 可调]
+          - [输出电压上限, 约 29.2 V]
+      # 右栏：电流设定与保护链路
+      - {type: text, x: 4.75, y: 1.32, w: 2.0, text: "", size: 12}
+      - {type: block, x: 4.75, y: 1.95, w: 1.25, h: 0.8, text: [STM32G431, 主控], size: 14, size2: 12}
+      - {type: block, x: 6.55, y: 1.95, w: 1.10, h: 0.8, text: [分压, × 8.2/18.2], size: 14, size2: 12}
+      - {type: block, x: 8.20, y: 1.95, w: 1.25, h: 0.8, text: [LT3763, 恒流控制], size: 14, size2: 12}
+      - {type: block, x: 10.00, y: 1.95, w: 1.40, h: 0.8, text: [同步降压, 4 MOS · 6.8 μH], size: 14, size2: 11}
+      - {type: block, x: 11.95, y: 1.95, w: 0.83, h: 0.8, text: [激光, 泵浦], size: 14, size2: 14}
+      - {type: arrow, from: [6.00, 2.35], to: [6.55, 2.35], text: DAC, w: 0.6, size: 11, lw: 1.5}
+      - {type: arrow, from: [7.65, 2.35], to: [8.20, 2.35], text: CTRL1, w: 0.6, size: 10, lw: 1.5}
+      - {type: arrow, from: [9.45, 2.35], to: [10.00, 2.35], text: 驱动, w: 0.6, size: 11, lw: 1.5}
+      - {type: arrow, from: [11.40, 2.35], to: [11.95, 2.35], text: 18 A, w: 0.6, size: 11, lw: 1.5}
+      - {type: wire, points: [[5.375, 1.95], [5.375, 1.62], [8.825, 1.62], [8.825, 1.95]], text: PWM 启停, label_at: [7.1, 1.31], w: 1.4}
+      - {type: block, x: 10.00, y: 3.10, w: 1.40, h: 0.55, text: [2.5 mΩ 采样], size: 13}
+      - {type: wire, points: [[10.70, 2.75], [10.70, 3.10]]}
+      - {type: wire, points: [[10.00, 3.375], [9.10, 3.375], [9.10, 2.75]], text: 电流反馈, label_at: [9.55, 3.42], w: 1.0, size: 11}
+      - {type: wire, points: [[8.45, 2.75], [8.45, 3.95], [5.375, 3.95], [5.375, 2.75]], text: "IMON 电流监测、FAULT 故障", label_at: [6.9, 3.62], w: 2.8}
+      - {type: rule, x: 4.75, y: 4.25, w: 8.03, h: 0.01}
+      - type: text
+        x: 4.75
+        y: 4.4
+        w: 8.03
+        size: 16
+        spacing: 1.35
         text:
-          - "V(CTRL1) = D/4095 × 3.3 V"
-          - "　　　　　× 8.2/18.2"
-          - "　　　　≈ D × 0.363 mV"
-          - "I(OUT) = 13.6 A/V × V(CTRL1)"
-          - "　　　　≈ D × 4.94 mA"
-          - "18 A 对应 D = 3645"
+          - "__电流设定：__"
+          - "V(CTRL1) = D / 4095 × 3.3 V × 8.2 / 18.2 ≈ D × 0.363 mV"
+          - "I(OUT) = 13.6 A/V × V(CTRL1) ≈ D × 4.94 mA，18 A 对应 D = 3645"
+      - {type: rule, x: 4.75, y: 5.55, w: 8.03, h: 0.01}
+      - {type: text, x: 4.75, y: 5.68, w: 3.95, text: ["__功率级：__", "上下桥各两只 MOS 并联，电感 6.8 μH", "四层板，功率区与采样区分开"], size: 15, spacing: 1.22}
+      - {type: text, x: 8.93, y: 5.68, w: 3.85, text: ["__保护：__", "软启动、欠压锁定、输入平均限流", "FAULT 故障关断、独立看门狗"], size: 15, spacing: 1.22}
     notes: |
-      驱动板以 LT3763 为核心做恒流，单片机用 DAC 设定电流。右边是设定链路：DAC 码值 D 经分压送到 CTRL1，输出电流约等于 D 乘 4.94 mA，18 A 对应 D 为 3645。
+      驱动板以 LT3763 恒流控制器为核心。单片机通过 DAC 给出码值 D，经分压送到 CTRL1 设定电流；PWM 引脚控制启停。
+      输出电流经 2.5 mΩ 采样电阻反馈给 LT3763 闭环；电流监测和故障信号送回单片机，出现故障时拉低 PWM、DAC 清零。
+      输出电流约等于 D 乘 4.94 mA，18 A 对应 D 为 3645。
 
   - layout: canvas
     title: 驱动板阶梯测试
     items:
-      - {type: image, src: assets/图/驱动板_线性度.png, x: 0.55, y: 1.35, w: 5.15}
+      - {type: image, src: assets/图/驱动板_线性度_无图注.png, x: 0.55, y: 1.35, w: 5.5, h: 3.9, cap_box: true, caption: "输出电流与 DAC 码值（LT3763，5 Ω 负载）", cap_size: 14}
       - type: table
-        x: 5.95
-        y: 1.4
-        w: 6.83
-        row_h: 0.44
+        x: 6.40
+        y: 1.35
+        w: 6.38
+        row_h: 0.4875
         size: 15
-        widths: [1.1, 1.25, 1.5, 1.1, 1.13, 0.75]
+        widths: [1.1, 1.2, 1.4, 1.0, 1.0, 0.68]
         align: [center, center, center, center, center, center]
         rows:
           - [电流 / A, DAC 码值, 负载, 电压 / V, 功率 / W, 结果]
@@ -167,239 +112,224 @@ slides:
           - ["14", "2835", "1 Ω ∥ 6 Ω", "12.0", "168", 通过]
           - ["16", "3240", "1 Ω ∥ 2 Ω", "10.7", "171", 通过]
           - ["18", "3645", "1 Ω ∥ 2 Ω", "12.0", "216", 通过]
+      - {type: rule, x: 0.55, y: 5.78, w: 12.23, h: 0.01}
       - type: bullets
-        x: 5.95
-        y: 5.12
-        w: 6.83
-        h: 1.4
+        x: 0.55
+        y: 5.88
+        w: 5.7
+        h: 0.8
         size: 15
-        gap: 4
+        gap: 3
         items:
-          - "DAC 每档加 405 码（约 2 A），七档全部达到设定电流"
+          - "七档全部达到设定电流，DAC 每档加 405 码，约 2 A"
+          - "切换电阻组合，使各档输出电压在 10–18 V"
+      - type: bullets
+        x: 6.40
+        y: 5.88
+        w: 6.38
+        h: 0.8
+        size: 15
+        gap: 3
+        items:
           - "CTRL1 斜率实测 36.6 mV / 100 码，理论 36.3 mV，偏差 < 1%"
+          - "DAC = 1100：负载电压法 5.46 A，R1 法 5.60 A，相差 2.6%"
     notes: |
-      阶梯测试从 6 A 到 18 A 共七档，全部达到设定电流，最高 216 W。左边是线性度：负载电压法和理论值基本重合，R1 法略高，与采样电阻公差和毫伏级读数误差相符。
+      左图是线性度：负载电压法与理论值基本重合，R1 法略高，与采样电阻公差和毫伏级读数误差相符。
+      右表是 6 A 到 18 A 的阶梯测试，七档全部达到设定电流，最高一档 18 A、约 12 V、216 W。
 
   - layout: canvas
     title: 振镜控制板
     items:
-      - {type: image, src: assets/图/控制板_外设接口原理图.png, x: 0.55, y: 1.35, w: 3.75, h: 2.9, valign: middle, caption: 外设接口原理图, cap_size: 14}
-      - {type: arrow, from: [4.38, 2.8], to: [4.78, 2.8]}
-      - {type: image, src: assets/图/控制板_PCB.png, x: 4.86, y: 1.35, w: 3.75, h: 2.9, valign: middle, caption: "PCB：双层，70 × 100 mm", cap_size: 14}
-      - {type: arrow, from: [8.69, 2.8], to: [9.09, 2.8]}
-      - {type: image, src: assets/图/控制板_实物.jpg, x: 9.17, y: 1.35, w: 3.61, h: 2.9, valign: middle, caption: 实物, cap_size: 14}
-      - {type: text, x: 0.55, y: 4.8, w: 5.9, text: "接口：", size: 18, bold: true}
+      - {type: image, src: assets/图/控制板_外设接口原理图.png, x: 0.55, y: 1.35, w: 3.75, h: 3.1, valign: middle, cap_box: true, caption: 外设接口原理图, cap_size: 14}
+      - {type: arrow, from: [4.38, 2.9], to: [4.78, 2.9]}
+      - {type: image, src: assets/图/控制板_PCB.png, x: 4.86, y: 1.35, w: 3.75, h: 3.1, valign: middle, cap_box: true, caption: PCB 布线, cap_size: 14}
+      - {type: arrow, from: [8.69, 2.9], to: [9.09, 2.9]}
+      - {type: image, src: assets/图/控制板_实物.jpg, x: 9.17, y: 1.35, w: 3.61, h: 3.1, valign: middle, cap_box: true, caption: 实物, cap_size: 14}
+      - {type: rule, x: 0.55, y: 4.95, w: 12.23, h: 0.01}
+      - {type: text, x: 0.55, y: 5.07, w: 3.9, text: "接口：", size: 17, bold: true}
       - type: bullets
         x: 0.55
-        y: 5.2
-        w: 5.9
-        h: 1.5
-        size: 16
-        gap: 4
+        y: 5.45
+        w: 3.9
+        h: 1.2
+        size: 15
+        gap: 3
         items:
           - "XY2-100（DB15）振镜接口"
           - "DB25 激光器接口"
-          - "串口屏、SD 卡、电源指示 LED"
-      - {type: text, x: 6.85, y: 4.8, w: 5.93, text: "主控与供电：", size: 18, bold: true}
+          - "串口屏、SD 卡、指示 LED"
+      - {type: text, x: 4.86, y: 5.07, w: 3.9, text: "主控与供电：", size: 17, bold: true}
       - type: bullets
-        x: 6.85
-        y: 5.2
-        w: 5.93
-        h: 1.5
-        size: 16
-        gap: 4
+        x: 4.86
+        y: 5.45
+        w: 3.9
+        h: 1.2
+        size: 15
+        gap: 3
         items:
-          - "STM32F405RGT6，JTAG / SWD 调试"
-          - "24 V 输入，转 5 V / 3.3 V；串口转 USB"
-          - "振镜差分信号走顶层，电源走底层"
+          - "STM32F405 主控，SWD 调试"
+          - "24 V 输入，滤波后转 5 V / 3.3 V"
+          - "串口转 USB；Z 轴电机驱动"
+      - {type: text, x: 9.17, y: 5.07, w: 3.61, text: "PCB：", size: 17, bold: true}
+      - type: bullets
+        x: 9.17
+        y: 5.45
+        w: 3.61
+        h: 1.2
+        size: 15
+        gap: 3
+        items:
+          - "双层，70 × 100 mm，厚 1.4 mm"
+          - "左输入、中处理、边缘输出"
+          - "顶层走振镜差分，底层走电源"
     notes: |
-      振镜控制板以 STM32F405 为核心，对外有 XY2-100 振镜接口和 DB25 激光器接口。原理图、PCB 到实物都已完成。
+      振镜控制板以 STM32F405 为核心，对外有 XY2-100 振镜接口和 DB25 激光器接口，还带 Z 轴电机驱动。
+      板子双层、70 × 100 mm，信号按左输入、中处理、边缘输出、下供电布置，振镜差分信号优先走顶层。
 
   # ================================================================== 光路
   - layout: canvas
     title: 三种扫描光路
     items:
-      - {type: image, src: assets/动图/光路_平行光.gif, x: 0.55, y: 1.2, w: 3.95}
-      - {type: image, src: assets/动图/光路_后聚焦.gif, x: 4.69, y: 1.2, w: 3.95}
-      - {type: image, src: assets/动图/光路_前聚焦.gif, x: 8.83, y: 1.2, w: 3.95}
-      - {type: text, x: 0.55, y: 5.42, w: 3.95, text: 平行光（单镜片准直）, size: 17, bold: true, align: center}
-      - {type: text, x: 0.55, y: 5.80, w: 3.95, text: "光斑 12.7 mm，约 210 W/cm²", size: 15, align: center}
-      - {type: text, x: 4.69, y: 5.42, w: 3.95, text: 后聚焦（准直 + 振镜 + 场镜）, size: 17, bold: true, align: center}
-      - {type: text, x: 4.69, y: 5.80, w: 3.95, text: "光斑 3.6 mm，约 2580 W/cm²", size: 15, align: center}
-      - {type: text, x: 8.83, y: 5.42, w: 3.95, text: 前聚焦（聚焦镜在振镜前）, size: 17, bold: true, align: center}
-      - {type: text, x: 8.83, y: 5.80, w: 3.95, text: "光斑 4.6 mm，焦点沿圆弧", size: 15, align: center}
-    note: "平台目前采用后聚焦；前聚焦不需要大口径场镜，可加动镜随距离调焦"
-    refs: "915 nm，芯径 155 μm，NA 0.22；进振镜光束按 12 mm 估算，待按实际准直镜更新"
+      - {type: image, src: assets/动图/光路_三种对比.gif, x: 0.55, y: 1.2, w: 12.23}
+    refs: ["915 nm，芯径 155 μm、NA 0.22（M² ≈ 58）", "平行光、后聚焦按进振镜光束 12 mm 估算；前聚焦按 B 方案镜组计算"]
     notes: |
-      三张图是同一套几何：振镜在上，地面在下 650 mm，区别只在镜片放在哪。右侧圆圈是同一比例的地面光斑。
+      三个面板是同一套几何：振镜在上，地面在下方 650 mm，振镜同步摆动，区别只在镜片放在哪里。
+      平行光只有一片准直镜，光斑 12.7 mm；后聚焦在振镜后加 F-θ 场镜，光斑 3.6 mm，焦点始终在地面上，这是平台现在用的光路。
+      前聚焦把聚焦镜组放在振镜前。焦点本来沿以振镜为圆心的圆弧走（蓝色虚线），把聚焦镜组做成动镜 + 物镜，动镜随转角移动，焦点就拉回到地面，这就是动态聚焦。
+      光斑大小还和进振镜的光束直径有关，前聚焦这里按 B 方案镜组算，出光更粗，所以光斑更小。
 
   - layout: canvas
-    title: 单镜片准直（平行光光路）
+    title: 平行光：单镜片准直
     items:
-      - {type: image, src: assets/动图/原理_单镜片准直.gif, x: 0.55, y: 1.3, w: 8.6}
-      - {type: text, x: 9.35, y: 1.4, w: 3.4, text: "计算结果：", size: 18, bold: true}
+      - {type: image, src: assets/动图/原理_单镜片准直.gif, x: 0.55, y: 1.35, w: 8.95}
+      - {type: text, x: 9.75, y: 1.35, w: 3.03, text: "计算结果：", size: 18, bold: true}
       - type: table
-        x: 9.35
-        y: 1.85
-        w: 3.43
+        x: 9.75
+        y: 1.82
+        w: 3.03
         style: plain
         size: 15
-        row_h: 0.42
-        widths: [1.6, 1.83]
+        row_h: 0.5
+        widths: [1.55, 1.48]
         rows:
           - [准直镜焦距, ≈ 27 mm]
           - [光束直径, 12 mm]
           - [发散半角, 2.8 mrad]
           - [地面光斑, 12.7 mm]
-          - [起伏 ±100 mm, 12.5–12.9 mm]
-          - [平均功率密度, 约 210 W/cm²]
+          - [高度 ±100 mm, 12.5–12.9 mm]
+          - [功率密度, 约 210 W/cm²]
+      - {type: rule, x: 0.55, y: 5.0, w: 12.23, h: 0.01}
       - type: text
-        x: 0.75
-        y: 5.35
-        w: 8.2
+        x: 0.55
+        y: 5.15
+        w: 12.23
         size: 16
-        spacing: 1.3
+        spacing: 1.35
         text:
-          - "纤芯上每一点经准直镜后变成一束平行光，方向各不相同，整束光带发散角 r / f₁"
-          - "光斑约等于准直后的光束直径，高度变化影响很小，但功率密度低"
+          - "纤芯上每一点经准直镜后都变成一束平行光，但方向各不相同，所以整束光带一个发散角 θ = r / f₁。"
+          - "光斑约等于准直后的光束直径，对地面高度不敏感：高度变化 ±100 mm，光斑只在 12.5–12.9 mm 之间。"
+          - "缺点是光斑大、功率密度低，只有后聚焦的 1/12，所以平台不用这种光路。"
     refs: "地面光斑按光程 0.75 m、M² 高斯光束计算"
     notes: |
-      红点是纤芯上的一个发光点，经准直镜后变成一束平行光；发光点位置不同，平行光方向不同，所以整束光有一个发散角，等于纤芯半径除以焦距。平行光光路的光斑几乎不随高度变化，但功率密度低。
+      红点是纤芯上的一个发光点，经准直镜后变成一束平行光；发光点位置不同，平行光方向不同，所以整束光有发散角，等于纤芯半径除以焦距。
+      平行光光路的好处是对高度不敏感，缺点是光斑大、功率密度低。
 
   - layout: canvas
-    title: 双镜片聚焦
+    title: Zemax 仿真：单镜片准直（915 nm）
     items:
-      - {type: image, src: assets/动图/原理_双镜片聚焦.gif, x: 0.55, y: 1.3, w: 8.6}
-      - {type: text, x: 9.35, y: 1.4, w: 3.4, text: "计算结果：", size: 18, bold: true}
+      - {type: placeholder, x: 0.55, y: 1.35, w: 4.45, h: 5.25, title: 光路图（待补）, note: "光纤点光源 → 准直镜 → 0.75 m"}
+      - {type: placeholder, x: 5.2, y: 1.35, w: 4.45, h: 5.25, title: 光束足迹 / POP 光斑（待补）, note: "准直镜后 0.1 m、0.75 m 处"}
+      - {type: text, x: 9.95, y: 1.35, w: 2.83, text: "仿真设置：", size: 18, bold: true}
+      - type: bullets
+        x: 9.95
+        y: 1.8
+        w: 2.83
+        h: 4.8
+        size: 15
+        gap: 8
+        items:
+          - "波长 915 nm"
+          - "芯径 155 μm，NA 0.22"
+          - "准直镜 f ≈ 27 mm"
+          - "出射光束约 12 mm"
+          - "评价面 0.1 m、0.75 m"
+          - "输出光束直径、发散角"
+          - "POP 光斑分布"
+    notes: |
+      这一页放单镜片准直在 915 nm 下的 Zemax 结果。
+
+  - layout: canvas
+    title: 后聚焦：振镜 + F-θ 场镜
+    items:
+      - {type: image, src: assets/动图/振镜扫描_三维.gif, x: 0.35, y: 1.2, w: 8.75}
+      - {type: text, x: 9.3, y: 1.35, w: 3.48, text: "光路：", size: 18, bold: true}
+      - {type: text, x: 9.3, y: 1.77, w: 3.48, text: ["准直镜 → X 镜 → Y 镜", "→ F-θ 场镜 → 杂草茎部"], size: 15, spacing: 1.3}
+      - {type: text, x: 9.3, y: 2.65, w: 3.48, text: "扫描：", size: 18, bold: true}
+      - type: bullets
+        x: 9.3
+        y: 3.05
+        w: 3.48
+        h: 1.6
+        size: 15
+        gap: 4
+        items:
+          - "X 镜管 x 向，Y 镜管 y 向"
+          - "镜片转 θ，光束偏转 2θ"
+          - "落点 = f × 偏转角"
+          - "350 mm 幅面只需转 ±7.7°"
+      - {type: text, x: 9.3, y: 4.62, w: 3.48, text: "光斑：", size: 18, bold: true}
       - type: table
-        x: 9.35
-        y: 1.85
-        w: 3.43
+        x: 9.3
+        y: 5.0
+        w: 3.48
         style: plain
         size: 15
-        row_h: 0.42
-        widths: [1.6, 1.83]
+        row_h: 0.34
+        widths: [1.7, 1.78]
         rows:
-          - [准直镜 f₁, ≈ 27 mm]
-          - [场镜 f₂, 650 mm]
-          - [纤芯的像, 3.7 mm]
+          - [纤芯成像, 3.7 mm]
           - [高斯光束计算, 3.6 mm]
-          - [焦深（±10%）, ±86 mm]
-          - [平均功率密度, 约 2580 W/cm²]
+          - [焦深, ±86 mm]
+    note: "平台目前采用的光路：光斑 3.6 mm，约 2580 W/cm²，是平行光的 12.5 倍"
+    notes: |
+      这是平台现在用的后聚焦光路。两块振镜各管一个方向：X 镜绕竖直轴转管 x，Y 镜绕水平轴转管 y。镜片转 θ，光束偏转 2θ；F-θ 场镜让落点等于焦距乘偏转角。
+      动画里先算好每株杂草茎部的坐标，再反求两块镜片的转角；跳转时关光，到位后出光，打过的杂草变黄。
+      光斑就是纤芯经准直镜和场镜成的像：155 μm 乘 650 除以 27.3，约 3.7 mm，按高斯光束算是 3.6 mm。
+
+  - layout: canvas
+    title: 前聚焦：动态聚焦
+    items:
+      - {type: image, src: assets/动图/原理_动态聚焦.gif, x: 0.3, y: 1.15, w: 9.6}
+      - {type: text, x: 10.1, y: 1.35, w: 2.68, text: "原理：", size: 18, bold: true}
       - type: text
-        x: 0.75
-        y: 5.35
-        w: 8.2
-        size: 16
+        x: 10.1
+        y: 1.77
+        w: 2.68
+        size: 15
         spacing: 1.3
         text:
-          - "第二片镜把每束平行光会聚到焦平面上一点，纤芯被成像，像就是光斑"
-          - "光斑 d = 芯径 × f₂ / f₁；功率密度是平行光的 12.5 倍"
-    refs: "纤芯的像 155 μm × 650 / 27.3 = 3.7 mm；高斯光束计算含准直光的残余发散"
-    notes: |
-      在准直镜后再加一片聚焦镜，纤芯被成像到焦平面上，像的大小就是光斑，约 3.6 mm，功率密度是平行光的 12.5 倍。
-
-  - layout: canvas
-    title: Zemax 仿真：准直与聚焦（915 nm）
-    items:
-      - {type: text, x: 0.55, y: 1.3, w: 5.95, text: "单镜片准直", size: 18, bold: true}
-      - {type: placeholder, x: 0.55, y: 1.75, w: 5.95, h: 2.25, title: 光路图（待补）, note: "光纤点光源 155 μm / NA 0.22 → 准直镜"}
-      - {type: placeholder, x: 0.55, y: 4.15, w: 5.95, h: 2.25, title: 光束足迹 / POP（待补）, note: "准直镜后 0.1 m、0.75 m 处"}
-      - {type: text, x: 6.83, y: 1.3, w: 5.95, text: "双镜片聚焦", size: 18, bold: true}
-      - {type: placeholder, x: 6.83, y: 1.75, w: 5.95, h: 2.25, title: 光路图（待补）, note: "准直镜 + 场镜，含振镜偏转"}
-      - {type: placeholder, x: 6.83, y: 4.15, w: 5.95, h: 2.25, title: 点列图 / POP（待补）, note: "视场中心与边缘 ±175 mm"}
-    notes: |
-      这一页放 915 nm 下准直和聚焦的 Zemax 仿真结果。
-
-  - layout: canvas
-    title: 后聚焦光路与振镜扫描
-    items:
-      - {type: image, src: assets/动图/振镜扫描_三维.gif, x: 0.4, y: 1.18, w: 8.65}
-      - {type: text, x: 9.3, y: 1.4, w: 3.5, text: "光路：", size: 18, bold: true}
-      - {type: text, x: 9.3, y: 1.82, w: 3.5, text: ["准直镜 → X 镜 → Y 镜", "→ F-θ 场镜 → 杂草茎部"], size: 16, spacing: 1.3}
-      - {type: text, x: 9.3, y: 2.72, w: 3.5, text: "关系：", size: 18, bold: true}
-      - type: bullets
-        x: 9.3
-        y: 3.12
-        w: 3.5
-        h: 2.2
-        size: 16
-        gap: 5
-        items:
-          - "镜片转 θ，光束偏转 2θ"
-          - "落点 = f × 偏转角（F-θ）"
-          - "350 mm 幅面只需转 ±7.7°"
-      - {type: text, x: 9.3, y: 4.68, w: 3.5, text: "结果：", size: 18, bold: true}
-      - type: bullets
-        x: 9.3
-        y: 5.08
-        w: 3.5
-        h: 1.6
-        size: 16
-        gap: 5
-        items:
-          - "光斑 3.6 mm，焦深 ±86 mm"
-          - "焦点始终落在作业面上"
-    notes: |
-      这是平台现在用的后聚焦光路。两块振镜各管一个方向：X 镜绕竖直轴转管 x，Y 镜绕水平轴转管 y。镜片转 θ，光束偏转 2θ，再经 F-θ 场镜，落点等于焦距乘偏转角。
-      动画里先算好每株杂草茎部的位置，再反求两块镜片的转角；跳转时关光，到位后出光。
-
-  - layout: canvas
-    title: 前聚焦光路
-    items:
-      - {type: image, src: assets/动图/光路_前聚焦.gif, x: 0.55, y: 1.2, w: 5.2}
-      - type: table
-        x: 6.15
-        y: 1.4
-        w: 6.63
-        row_h: 0.5
-        size: 15
-        widths: [1.5, 2.3, 2.83]
-        align: [left, left, left]
-        rows:
-          - ["", 后聚焦, 前聚焦]
-          - [光斑, 3.6 mm, 4.6 mm]
-          - [焦点轨迹, 平面, "圆弧，边缘离焦 23 mm"]
-          - [焦深, ±86 mm, ±143 mm]
-          - [落点与转角, x = f·θ, "x = R·tanθ，边缘偏 2.4%"]
-          - [关键镜片, F-θ 场镜（M102）, 小口径聚焦镜]
-          - [随距离调焦, 不能, 换成动镜 + 物镜即可]
-      - type: text
-        x: 6.15
-        y: 5.15
-        w: 6.63
-        size: 16
-        spacing: 1.3
-        text:
-          - "M² 大，焦深也大：23 mm 的边缘离焦只让光斑增大 0.3%"
-          - "前聚焦真正的用处是调焦，见下一页"
-    notes: |
-      前聚焦把聚焦镜放在振镜前，焦点沿以振镜为圆心的圆弧走，平面边缘离焦 23 mm。但这台激光器焦深有 ±143 mm，影响只有 0.3%。前聚焦的好处是可以调焦。
-
-  - layout: canvas
-    title: 动态聚焦原理
-    items:
-      - {type: image, src: assets/动图/原理_动态聚焦.gif, x: 0.3, y: 1.15, w: 9.85}
-      - {type: text, x: 10.35, y: 1.4, w: 2.45, text: "原理：", size: 18, bold: true}
-      - {type: text, x: 10.35, y: 1.82, w: 2.45, text: "动镜后退 → 镜间空气隙变大 → 焦点拉近", size: 16, spacing: 1.25}
-      - {type: text, x: 10.35, y: 2.95, w: 2.45, text: "915 nm 结果：", size: 18, bold: true}
-      - type: bullets
-        x: 10.35
-        y: 3.35
-        w: 2.45
-        h: 3.3
-        size: 15
+          - "聚焦镜组放在振镜前，由动镜（负）+ 物镜（正）组成"
+          - "动镜后退 → 空气隙变大 → 焦点拉近"
         gap: 6
+      - {type: text, x: 10.1, y: 3.55, w: 2.68, text: "915 nm 结果：", size: 18, bold: true}
+      - type: bullets
+        x: 10.1
+        y: 3.95
+        w: 2.68
+        h: 2.7
+        size: 15
+        gap: 5
         items:
           - "1–10 m 行程 7.94 mm"
           - "1 m 光斑 3.6 mm"
           - "不调焦时 13.3 mm"
           - "功率密度约 14 倍"
           - "5 m 外受 M² 限制"
-    refs: "B 方案镜组，915 nm 熔石英折射率逐面光线追迹"
+    refs: "B 方案镜组（BICV-FS04 + LA4904 + LB4842），915 nm 熔石英折射率逐面光线追迹"
     notes: |
-      动镜往后退，两片镜之间的空气隙变大，焦点就拉近。从 10 m 到 1 m，动镜走 7.94 mm。下面刻度尺可以看到，大部分行程用在 1 到 3 m。
-      1 m 处光斑 3.6 mm，不调焦是 13.3 mm，功率密度差约 14 倍。5 m 以外光斑都在 19 mm 以上，这是激光器 M² 决定的。
+      前聚焦把聚焦镜组放在振镜前，镜组由一片负透镜（动镜）和两片正透镜（物镜）组成。动镜往后退，两者之间的空气隙变大，焦点就拉近。
+      从 10 m 到 1 m，动镜走 7.94 mm，刻度尺可以看到大部分行程用在 1 到 3 m。
+      1 m 处光斑 3.6 mm，不调焦是 13.3 mm，功率密度差约 14 倍；5 m 以外光斑都在 19 mm 以上，这是激光器 M² 决定的。
 
   - layout: canvas
     title: Zemax 仿真：动态聚焦镜组（B 方案）
@@ -408,8 +338,8 @@ slides:
       - {type: text, x: 0.65, y: 1.36, w: 3, text: "对焦 1 m", size: 15, bold: true}
       - {type: image, src: assets/zemax/B_10m_镜组.png, x: 0.55, y: 4.08, w: 5.4, border: true}
       - {type: text, x: 0.65, y: 4.14, w: 3, text: "对焦 10 m", size: 15, bold: true}
-      - {type: image, src: assets/zemax/B_1m_点列图.png, x: 6.25, y: 1.3, w: 3.2, caption: 点列图，1 m, cap_size: 13}
-      - {type: image, src: assets/zemax/B_10m_点列图.png, x: 6.25, y: 4.08, w: 3.2, caption: 点列图，10 m, cap_size: 13}
+      - {type: image, src: assets/zemax/B_1m_点列图.png, x: 6.25, y: 1.3, w: 3.1, caption: 点列图，1 m, cap_size: 13}
+      - {type: image, src: assets/zemax/B_10m_点列图.png, x: 6.25, y: 4.15, w: 3.2, caption: 点列图，10 m, cap_size: 13}
       - {type: text, x: 9.8, y: 1.4, w: 3.0, text: "镜组：", size: 18, bold: true}
       - type: bullets
         x: 9.8
@@ -447,7 +377,7 @@ slides:
         x: 0.55
         y: 1.78
         w: 6.0
-        row_h: 0.46
+        row_h: 0.5
         size: 14
         widths: [0.62, 2.05, 1.05, 1.25, 1.03]
         align: [center, left, center, center, center]
@@ -456,7 +386,19 @@ slides:
           - [A, AFL50-100 非球面, "105.9", "0.204", "11.12"]
           - [B, LA4904 + LB4842, "90.0", "0.113", "7.91"]
           - [C, AC508-100 胶合, "99.4", "0.466", "9.44"]
-      - {type: text, x: 0.55, y: 3.95, w: 6.0, text: ["选 B：两片正透镜分摊弯折，球差最小；", "全熔石英、不胶合，适合大功率连续光。C 为胶合镜像差对照。"], size: 15, spacing: 1.35}
+      - {type: text, x: 0.55, y: 3.95, w: 6.0, text: "为什么选 B：", size: 17, bold: true}
+      - type: bullets
+        x: 0.55
+        y: 4.32
+        w: 6.0
+        h: 1.8
+        size: 15
+        gap: 5
+        items:
+          - "最差波前 0.113 λ，三种中最小；2 m 外 ≤ 0.032 λ"
+          - "行程 7.91 mm，三种中最短，丝杆行程够用"
+          - "两片正透镜分摊弯折，球差小；全熔石英、不胶合，适合大功率连续光"
+          - "C 为胶合镜，只作像差对照"
       - {type: text, x: 6.95, y: 1.3, w: 5.85, text: "B 方案换成 915 nm（镜间空气隙 / mm）：", size: 18, bold: true}
       - type: table
         x: 6.95
@@ -474,24 +416,24 @@ slides:
           - [3 m, "62.21", "62.20", "61.90"]
           - [5 m, "61.09", "61.07", "60.78"]
           - [10 m, "60.27", "60.24", "59.96"]
-      - {type: text, x: 6.95, y: 4.85, w: 5.83, text: "追迹程序在 1064 nm 下与 Zemax 相差 < 0.08 mm；换成 915 nm 后空气隙整体小约 0.3 mm，行程 7.94 mm。", size: 15, spacing: 1.3}
+      - {type: text, x: 6.95, y: 4.85, w: 5.83, text: ["追迹程序在 1064 nm 下与 Zemax 相差 < 0.08 mm，", "换成 915 nm 后空气隙整体小约 0.3 mm，行程 7.94 mm。"], size: 15, spacing: 1.35}
     note: "换 915 nm 镜组结构不用改，Z 位置表整体平移约 0.3 mm 后重新标定"
     refs: "A/B/C：Zemax 结果 v0.2；915 nm：厂家处方 + Sellmeier 折射率近轴追迹"
     notes: |
       左边是 Zemax 比较的三种镜组，B 的最差波前最小、行程最短，选 B。
-      右边是换成 915 nm 的结果：我先用自己的追迹程序在 1064 nm 下复算，和 Zemax 差不到 0.08 mm，再换成 915 nm 的折射率。空气隙整体小约 0.3 mm，行程几乎不变。所以结构不用改，Z 位置表重新标定即可。
+      右边是换成 915 nm 的结果：先用追迹程序在 1064 nm 下复算，和 Zemax 差不到 0.08 mm，再换成 915 nm 的折射率。空气隙整体小约 0.3 mm，行程几乎不变。
 
   - layout: canvas
     title: 调焦模块结构
     items:
-      - {type: image, src: assets/动图/调焦模块传动.gif, x: 0.55, y: 1.3, w: 7.2, caption: 电机 → 联轴器 → 消隙丝杆 → 动镜滑座；物镜固定, cap_size: 14}
+      - {type: image, src: assets/动图/调焦模块传动.gif, x: 0.55, y: 1.3, w: 7.3, caption: 电机 → 联轴器 → 消隙丝杆 → 动镜滑座；物镜固定, cap_size: 14}
       - type: table
-        x: 8.05
+        x: 8.2
         y: 1.4
-        w: 4.73
-        row_h: 0.5
-        size: 14
-        widths: [1.85, 2.88]
+        w: 4.58
+        row_h: 0.6
+        size: 15
+        widths: [2.15, 2.43]
         align: [left, left]
         rows:
           - [项目, 结果]
@@ -499,10 +441,10 @@ slides:
           - [1–10 m 行程, 7.94 mm]
           - [推动滑座的力, 0.31 N]
           - [力矩安全系数, "8"]
-          - [断电自锁, 螺旋角 4.0° < 摩擦角 5.9°]
+          - [断电自锁, 4.0° < 5.9°]
           - [螺母回差, 0（弹簧预紧 5 N）]
-          - [镜距热胀（10 K）, 28 μm]
-      - {type: text, x: 0.55, y: 5.75, w: 7.2, text: ["导程 1 mm、每转 3200 步：一步 0.31 μm，且能自锁；", "导程 4 mm 时螺旋角 23°，断电后滑座会被推回。"], size: 15, spacing: 1.3}
+          - [热胀（温升 10 K）, 28 μm]
+      - {type: text, x: 0.55, y: 5.62, w: 7.3, text: ["__为什么选导程 1 mm：__", "每转 3200 步，一步 0.31 μm；螺旋角 4.0° 小于摩擦角，断电自锁。", "导程 4 mm 时螺旋角 23°，断电后滑座会被推回。"], size: 15, spacing: 1.3}
     refs: "传动计算：摩擦系数 0.10、预紧力 5 N 等为假设值"
     notes: |
       调焦模块：步进电机通过联轴器带动消隙丝杆，推动动镜滑座。导程 1 mm，一步 0.31 μm，断电自锁。
@@ -520,27 +462,27 @@ slides:
   - layout: canvas
     title: 杂草数据集
     items:
-      - {type: image, src: assets/图/数据_玉米田.png, x: 0.55, y: 1.3, w: 3.2, caption: 玉米田, cap_size: 14}
-      - {type: image, src: assets/图/数据_大豆田.png, x: 0.55, y: 3.95, w: 3.2, caption: 大豆田, cap_size: 14}
-      - {type: image, src: assets/图/数据_茎部关键点.png, x: 4.1, y: 1.3, w: 2.5, caption: 茎部关键点标注, cap_size: 14}
+      - {type: image, src: assets/图/数据_玉米田.png, x: 0.55, y: 1.32, w: 3.3, caption: 玉米田, cap_size: 14}
+      - {type: image, src: assets/图/数据_大豆田.png, x: 0.55, y: 4.0, w: 3.3, caption: 大豆田, cap_size: 14}
+      - {type: image, src: assets/图/数据_茎部关键点.png, x: 4.2, y: 1.32, w: 2.5, caption: 茎部关键点标注, cap_size: 14}
       - type: text
-        x: 4.1
-        y: 4.2
+        x: 4.2
+        y: 4.3
         w: 2.6
         size: 15
-        spacing: 1.35
+        spacing: 1.4
         text:
           - "类别：weed"
           - "每株 1 个茎部关键点"
           - "格式 [x, y, visibility]"
-          - "牛筋草、香附子、水莎草等"
+          - "牛筋草、香附子、水莎草"
       - type: table
-        x: 6.95
+        x: 7.1
         y: 1.35
-        w: 5.83
+        w: 5.68
         row_h: 0.42
         size: 15
-        widths: [1.5, 1.4, 1.5, 1.4]
+        widths: [1.4, 1.4, 1.5, 1.38]
         align: [left, center, center, center]
         rows:
           - [划分, 图像 / 张, 实例 / 个, 占比]
@@ -548,23 +490,23 @@ slides:
           - [测试集, "306", "2577", 19.8%]
           - [验证集, "154", "1224", 10.0%]
           - [合计, "1544", "12324", ""]
-      - {type: image, src: assets/图/数据_框尺寸分布.png, x: 6.95, y: 3.65, w: 3.3, caption: 检测框宽高分布, cap_size: 14}
-      - {type: text, x: 10.4, y: 4.3, w: 2.4, text: ["以小尺度目标为主", "要兼顾局部细节", "和复杂背景"], size: 15, spacing: 1.35, gap: 4}
+      - {type: image, src: assets/图/数据_框尺寸分布.png, x: 7.1, y: 3.75, w: 3.45, caption: 检测框宽高分布, cap_size: 14}
+      - {type: text, x: 10.75, y: 4.35, w: 2.03, text: ["以小尺度目标为主", "要兼顾局部细节", "和复杂背景"], size: 15, spacing: 1.4, gap: 4}
     notes: |
-      数据集在玉米田和大豆田俯视采集，每株杂草标一个框和一个茎部关键点，激光就打这个点。共 1544 张图像、12324 个实例。目标以小尺度为主。
+      数据集在玉米田和大豆田俯视采集，每株杂草标一个框和一个茎部关键点，激光就打这个点。共 1544 张图像、12324 个实例，目标以小尺度为主。
 
   - layout: canvas
     title: HVD-YOLO26n-Pose 模型
     items:
-      - {type: image, src: assets/图/模型_原始结构.png, x: 0.55, y: 1.25, h: 5.05, caption: YOLO26n-Pose（基线）, cap_size: 14}
+      - {type: image, src: assets/图/模型_原始结构.png, x: 0.55, y: 1.3, h: 5.0, caption: YOLO26n-Pose（基线）, cap_size: 14}
       - {type: arrow, from: [4.8, 3.7], to: [5.45, 3.7], text: 改进, w: 0.9}
-      - {type: image, src: assets/图/模型_HVD结构.png, x: 5.55, y: 1.25, h: 5.05, caption: HVD-YOLO26n-Pose, cap_size: 14}
-      - {type: text, x: 9.95, y: 1.35, w: 2.85, text: "VecAConv：", size: 17, bold: true}
-      - {type: text, x: 9.95, y: 1.75, w: 2.85, text: "加在 P3、P4 下采样层；通道、空间、行列三路门控，突出茎部特征", size: 15, spacing: 1.25}
-      - {type: text, x: 9.95, y: 3.0, w: 2.85, text: "分层差异化：", size: 17, bold: true}
-      - {type: text, x: 9.95, y: 3.4, w: 2.85, text: "残差系数 γ 初值 P3 为 0.02、P4 为 0.05", size: 15, spacing: 1.25}
-      - {type: text, x: 9.95, y: 4.35, w: 2.85, text: "DySample：", size: 17, bold: true}
-      - {type: text, x: 9.95, y: 4.75, w: 2.85, text: "替换特征融合中的上采样，按图像内容重建特征", size: 15, spacing: 1.25}
+      - {type: image, src: assets/图/模型_HVD结构.png, x: 5.55, y: 1.3, h: 5.0, caption: HVD-YOLO26n-Pose, cap_size: 14}
+      - {type: text, x: 9.95, y: 1.4, w: 2.83, text: "VecAConv：", size: 17, bold: true}
+      - {type: text, x: 9.95, y: 1.8, w: 2.83, text: "加在 P3、P4 下采样层；通道、空间、行列三路门控，突出茎部特征", size: 15, spacing: 1.3}
+      - {type: text, x: 9.95, y: 3.05, w: 2.83, text: "分层差异化：", size: 17, bold: true}
+      - {type: text, x: 9.95, y: 3.45, w: 2.83, text: "残差系数 γ 初值 P3 为 0.02、P4 为 0.05，训练中继续学习", size: 15, spacing: 1.3}
+      - {type: text, x: 9.95, y: 4.55, w: 2.83, text: "DySample：", size: 17, bold: true}
+      - {type: text, x: 9.95, y: 4.95, w: 2.83, text: "替换特征融合中的上采样，按图像内容重建特征", size: 15, spacing: 1.3}
     refs: "DySample：Liu W, et al. Learning to upsample by learning to sample. ICCV 2023"
     notes: |
       模型以 YOLO26n-Pose 为基础，同时做杂草检测和茎部关键点定位。改了三处：P3、P4 下采样层加 VecAConv，两层初始调制力度不同；上采样换成 DySample。
@@ -574,33 +516,72 @@ slides:
     items:
       - type: table
         x: 0.55
-        y: 1.4
-        w: 8.45
-        row_h: 0.5
-        size: 14
-        widths: [2.05, 1.35, 1.7, 1.35, 1.0, 1.0]
+        y: 1.35
+        w: 12.23
+        row_h: 0.44
+        size: 15
+        widths: [2.8, 1.8, 2.1, 1.8, 1.6, 1.6]
         align: [left, center, center, center, center, center]
         rows:
-          - [模型, Box mAP50, Box mAP50–95, Pose mAP50, GFLOPs, 参数 M]
+          - [模型, Box mAP50, Box mAP50–95, Pose mAP50, GFLOPs, 参数 / M]
           - [YOLOv8n-Pose, "88.9", "48.2", "93.3", "8.4", "3.081"]
           - [YOLO11n-Pose, "87.2", "47.9", "93.2", "6.7", "2.662"]
-          - [YOLO26n-Pose, "88.1", "49.0", "93.8", "5.6", "2.447"]
+          - [YOLO26n-Pose（基线）, "88.1", "49.0", "93.8", "5.6", "2.447"]
           - [__HVD-YOLO26n-Pose__, "__90.6__", "__51.1__", "__94.9__", "5.7", "2.495"]
+      - {type: image, src: assets/图/模型_PR曲线.png, x: 0.55, y: 3.72, w: 4.95, caption: Box PR 与 Pose PR 曲线（HVD 与基线）, cap_size: 13}
       - type: bullets
-        x: 0.55
-        y: 4.3
-        w: 8.45
-        h: 1.6
+        x: 5.9
+        y: 3.85
+        w: 6.88
+        h: 2.8
         size: 16
+        gap: 8
+        items:
+          - "相比基线：Box mAP50 +2.5，Box mAP50–95 +2.1，Pose mAP50 +1.1 个百分点"
+          - "参数量只增 0.048 M，计算量只增 0.1 GFLOPs，仍低于 YOLOv8n 和 YOLO11n"
+          - "PR 曲线整体在基线上方，高召回率区域仍保持较高精确率"
+    refs: "mAP 单位 %；640 × 640 输入，200 轮，batch 32，RTX 5080，PyTorch 2.12 / CUDA 12.8"
+    notes: |
+      和 YOLOv8n、YOLO11n、基线 YOLO26n 对比，HVD 三项精度最高，计算量只多 0.1 GFLOPs。PR 曲线整体在基线上方。
+
+  - layout: canvas
+    title: 消融实验
+    items:
+      - type: table
+        x: 0.55
+        y: 1.35
+        w: 7.9
+        row_h: 0.58
+        size: 15
+        widths: [2.9, 1.25, 1.35, 1.2, 1.2]
+        align: [left, center, center, center, center]
+        rows:
+          - [配置, Box mAP50, Box mAP50–95, Pose mAP50, Pose mAP50–95]
+          - [基线, "88.1", "49.0", "93.8", "93.6"]
+          - [仅 DySample, "89.7", "50.5", "94.9", "94.5"]
+          - [仅 P3 强, "90.0", "50.8", "94.2", "94.0"]
+          - [P3 强 + DySample, "89.7", "51.1", "94.1", "93.9"]
+          - [仅 P4 强, "89.3", "49.6", "94.1", "93.8"]
+          - [P4 强 + DySample, "89.4", "50.5", "95.1", "94.8"]
+          - [P3 强 + P4 强 + DySample, "89.6", "50.4", "94.0", "93.9"]
+          - [__P3 弱 + P4 强 + DySample__, "__90.6__", "__51.1__", "__94.9__", "__94.6__"]
+      - {type: text, x: 8.85, y: 1.4, w: 3.93, text: "强、弱：", size: 17, bold: true}
+      - {type: text, x: 8.85, y: 1.8, w: 3.93, text: "VecAConv 残差系数 γ 的初值：强 0.05，弱 0.02；训练中继续学习", size: 15, spacing: 1.3}
+      - {type: text, x: 8.85, y: 3.0, w: 3.93, text: "结果：", size: 17, bold: true}
+      - type: bullets
+        x: 8.85
+        y: 3.4
+        w: 3.93
+        h: 3.2
+        size: 15
         gap: 6
         items:
-          - "相比基线：Box mAP50 +2.5、mAP50–95 +2.1、Pose mAP50 +1.1 个百分点"
-          - "参数量只增 0.048 M，计算量只增 0.1 GFLOPs"
-      - {type: image, src: assets/图/模型_PR曲线.png, x: 9.25, y: 1.45, w: 3.55, caption: Box PR 与 Pose PR 曲线, cap_size: 14}
-    refs: "mAP 单位 %；640 × 640 输入，200 轮，batch 32，RTX 5080"
+          - "单独加 DySample，四项指标都提高"
+          - "P3、P4 都用强调制反而下降，浅层 P3 扰动过多"
+          - "P3 弱 + P4 强 + DySample 的 Box 指标最高，Pose 接近最高，作为最终配置"
     notes: |
-      和 YOLOv8n、YOLO11n、基线 YOLO26n 对比，HVD 三项精度最高，计算量只多 0.1 GFLOPs。
-      消融（中期报告）：仅 DySample 89.7 / 50.5 / 94.9；P3 弱 + P4 强 + DySample 90.6 / 51.1 / 94.9。
+      消融实验以 YOLO26n-Pose 为基线。单独加 DySample 四项指标都提高；P3、P4 都用强调制反而下降，说明浅层 P3 需要少一些扰动。
+      最终选 P3 弱、P4 强加 DySample：Box 两项最高，Pose 接近最高，兼顾检测和关键点定位。
 
   - layout: canvas
     title: 复杂场景检测效果
@@ -615,57 +596,61 @@ slides:
   - layout: canvas
     title: 上位机作业流程
     items:
-      - {type: image, src: assets/图/上位机流程.png, x: 0.55, y: 1.25, h: 5.45}
-      - {type: text, x: 8.0, y: 1.4, w: 4.8, text: "已完成：", size: 18, bold: true}
-      - {type: text, x: 8.0, y: 1.82, w: 4.8, text: "图像采集；杂草识别与茎部定位", size: 16}
-      - {type: text, x: 8.0, y: 2.7, w: 4.8, text: "进行中：", size: 18, bold: true}
+      - {type: image, src: assets/图/上位机流程.png, x: 0.55, y: 1.3, h: 5.35}
+      - {type: text, x: 8.0, y: 1.4, w: 4.78, text: "已完成：", size: 18, bold: true}
+      - {type: text, x: 8.0, y: 1.82, w: 4.78, text: ["图像采集（RGB + 深度）", "杂草检测、跟踪与茎部定位"], size: 16, spacing: 1.3}
+      - {type: rule, x: 8.0, y: 2.75, w: 4.78, h: 0.01}
+      - {type: text, x: 8.0, y: 2.9, w: 4.78, text: "进行中：", size: 18, bold: true}
       - type: bullets
         x: 8.0
-        y: 3.1
-        w: 4.8
-        h: 1.4
+        y: 3.3
+        w: 4.78
+        h: 1.5
         size: 16
         gap: 4
         items:
-          - "像素坐标与作业平面的标定"
+          - "像素坐标 → 激光坐标标定（九点标定）"
           - "与振镜控制板通信"
-          - "出光时序"
-      - {type: text, x: 8.0, y: 4.75, w: 4.8, text: "下一步：", size: 18, bold: true}
-      - {type: text, x: 8.0, y: 5.17, w: 4.8, text: "四光头、双相机联调", size: 16}
+          - "出光时序与运动补偿"
+      - {type: rule, x: 8.0, y: 4.85, w: 4.78, h: 0.01}
+      - {type: text, x: 8.0, y: 5.0, w: 4.78, text: "下一步：", size: 18, bold: true}
+      - {type: text, x: 8.0, y: 5.42, w: 4.78, text: "四光头、双相机联调", size: 16}
     notes: |
-      上位机流程：采集、识别、坐标转换、出光。识别部分已完成，标定、通信和出光时序正在联调。
+      上位机流程：采集、识别跟踪、坐标转换、出光。识别部分已完成，九点标定、通信和出光时序正在联调。
 
   # ================================================================== 总结
   - layout: canvas
     title: 已完成工作与下一步
     items:
-      - {type: text, x: 0.55, y: 1.35, w: 7.6, text: "已完成：", size: 20, bold: true}
+      - {type: text, x: 0.55, y: 1.35, w: 7.7, text: "已完成：", size: 20, bold: true}
       - type: bullets
         x: 0.55
         y: 1.85
         w: 7.7
-        h: 2.6
+        h: 2.7
         size: 17
         gap: 8
         items:
           - "测试平台搭建；驱动板 6–18 A 全部达标；振镜控制板完成"
-          - "三种扫描光路分析，平台用后聚焦；两种调焦方案完成"
+          - "三种扫描光路分析，平台用后聚焦；动态聚焦与 Z 轴测距方案完成"
           - "动态聚焦镜组 Zemax 选型，915 nm 下行程 7.94 mm"
           - "数据集 1544 张；HVD 模型 Box mAP50 90.6%"
-      - {type: text, x: 0.55, y: 4.55, w: 7.6, text: "下一步：", size: 20, bold: true}
+      - {type: rule, x: 0.55, y: 4.15, w: 7.7, h: 0.01}
+      - {type: text, x: 0.55, y: 4.35, w: 7.6, text: "下一步：", size: 20, bold: true}
       - type: bullets
         x: 0.55
-        y: 5.05
-        w: 7.6
-        h: 1.9
+        y: 4.85
+        w: 7.7
+        h: 1.6
         size: 17
         gap: 8
         items:
-          - "915 nm 准直与聚焦的 Zemax 仿真；整机标定与联调"
+          - "915 nm 准直的 Zemax 仿真"
+          - "像素—激光坐标标定，四光头、双相机整机联调"
           - "静态试验定功率与作用时间；动态试验定行进速度"
       - {type: image, src: assets/图/测试平台.png, x: 8.55, y: 1.35, w: 4.2}
     notes: |
-      已完成：硬件平台、光路方案、动态聚焦镜组选型和识别模型。下一步做 915 nm 的 Zemax 仿真、整机联调和除草工艺试验。
+      已完成：硬件平台、光路方案、动态聚焦镜组选型和识别模型。下一步做 915 nm 准直的 Zemax 仿真、整机联调和除草工艺试验。
 
   - layout: end
     logo: assets/图/苏大校徽.png

@@ -35,7 +35,7 @@ async function main() {
   fs.writeFileSync(htmlPath, html);
 
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: anim.scale || 1 });   // scale：输出像素 = 逻辑尺寸 × scale
   await page.goto("file://" + htmlPath);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
@@ -53,7 +53,7 @@ async function main() {
   fs.copyFileSync(path.join(tmp, `f${String(stillIdx).padStart(4, "0")}.png`), still);
   // 两遍调色板：先统计全部帧的颜色，再按这套调色板编码，细线和半透明光束才不会发花
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(fps), "-i", path.join(tmp, "f%04d.png"),
-    "-vf", `split[a][b];[a]palettegen=max_colors=${anim.colors || 128}:stats_mode=full[p];[b][p]paletteuse=dither=none`,
+    "-vf", `split[a][b];[a]palettegen=max_colors=${anim.colors || 160}:stats_mode=full[p];[b][p]paletteuse=dither=none`,
     "-loop", "0", gif]);
   if (anim.mp4) {
     execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(fps), "-i", path.join(tmp, "f%04d.png"),

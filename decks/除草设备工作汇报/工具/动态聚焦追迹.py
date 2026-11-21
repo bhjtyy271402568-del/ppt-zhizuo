@@ -104,8 +104,9 @@ rows = []
 for L, gz in zip(DIST, ZEMAX_1064):
     rows.append({"距离_mm": L, "Zemax_1064_空气隙": gz, "近轴_1064_空气隙": gap_for(L, n1064),
                  "近轴_915_空气隙": gap_for(L, n915)})
+# 0.65–1 m 每 10 mm 一档（三光路对比图里前聚焦用到 0.71–0.74 m），1–10 m 每 250 mm 一档
 fine = [{"距离_mm": L, "空气隙_915": gap_for(L, n915)} for L in
-        [1000 + 250 * k for k in range(37)]]
+        [650 + 10 * k for k in range(35)] + [1000 + 250 * k for k in range(37)]]
 out = {
     "折射率": {"915nm": n915, "1064nm": n1064},
     "核对与915": rows,

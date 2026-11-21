@@ -10,7 +10,7 @@ const { chromium } = require("playwright");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".woff2": "font/woff2", ".woff": "font/woff" };
 
 async function main() {
-  const [page, outDir, name, w = "1400", h = "900", fps = "25"] = process.argv.slice(2);
+  const [page, outDir, name, w = "1600", h = "900", fps = "25", scale = "1.5"] = process.argv.slice(2);
   const root = __dirname;
   const server = http.createServer((req, res) => {
     const f = path.join(root, decodeURIComponent(req.url.split("?")[0]));
@@ -20,7 +20,7 @@ async function main() {
   }).listen(0);
   const port = server.address().port;
   const browser = await chromium.launch({ args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
-  const pg = await browser.newPage({ viewport: { width: +w, height: +h }, deviceScaleFactor: 1 });
+  const pg = await browser.newPage({ viewport: { width: +w, height: +h }, deviceScaleFactor: +scale });   // 输出像素 = 逻辑尺寸 × scale
   await pg.goto(`http://127.0.0.1:${port}/${encodeURIComponent(page)}`);
   await pg.waitForFunction(() => window.ready === true, null, { timeout: 60000 });
   await pg.evaluate(() => document.fonts.ready);
@@ -47,8 +47,6 @@ async function main() {
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", fps, "-i", path.join(tmp, "f%04d.png"),
     "-vf", "split[a][b];[a]palettegen=max_colors=200:stats_mode=full[p];[b][p]paletteuse=dither=sierra2_4a",
     "-loop", "0", gif]);
-  execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", fps, "-i", path.join(tmp, "f%04d.png"),
-    "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", path.join(outDir, `${name}.mp4`)]);
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log(`${gif}  ${frames} 帧  ${Math.round(fs.statSync(gif).size / 1024)} KB`);
 }

@@ -308,7 +308,9 @@ class ReportDeck:
         if it.get("caption"):
             cw = max(w, it.get("cap_w", 0))
             cx = x + (w - cw) / 2
-            tf = _box(s, cx, y + h + 0.06, cw, 0.4)
+            # cap_box：图注贴在框底（并排的几张图，图注对齐在同一条线上）
+            cy = (it["y"] + it["h"] + 0.06) if (it.get("cap_box") and "h" in it) else (y + h + 0.06)
+            tf = _box(s, cx, cy, cw, 0.4)
             tf.paragraphs[0].alignment = PP_ALIGN.CENTER
             _rich(tf.paragraphs[0], it["caption"], Pt(it.get("cap_size", 13)), T.R_INK)
         return pic
@@ -427,12 +429,42 @@ class ReportDeck:
         _line(s, x1, y1, x2, y2, color=it.get("color", "ink"), lw=it.get("lw", 2.0), head=True)
         if it.get("text"):
             w = it.get("w", 1.4)
-            tf = _box(s, (x1 + x2) / 2 - w / 2, min(y1, y2) - 0.62, w, 0.56, "bottom")
+            below = it.get("pos") == "below"
+            ty = (max(y1, y2) + 0.06) if below else (min(y1, y2) - 0.62)
+            tf = _box(s, (x1 + x2) / 2 - w / 2, ty, w, 0.56, "top" if below else "bottom")
             lines = it["text"] if isinstance(it["text"], list) else [it["text"]]
             for k, ln in enumerate(lines):
                 p = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
                 p.alignment = PP_ALIGN.CENTER
-                _rich(p, ln, Pt(it.get("size", 12)), T.R_INK, True)
+                _rich(p, ln, Pt(it.get("size", 12)), _c(it.get("tcolor", "ink")), it.get("bold", True))
+
+    def _block(self, s, it):
+        """框图方块：细边框 + 居中文字（第一行加粗）。"""
+        r = _rect(s, it["x"], it["y"], it["w"], it["h"], fill=it.get("fill", "WHITE") if it.get("fill") != "none" else None,
+                  line=it.get("line", "R_INK"), lw=it.get("lw", 1.0))
+        tf = _box(s, it["x"] + 0.06, it["y"] + 0.03, it["w"] - 0.12, it["h"] - 0.06, "middle")
+        lines = it["text"] if isinstance(it["text"], list) else [it["text"]]
+        for k, ln in enumerate(lines):
+            p = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
+            p.alignment = PP_ALIGN.CENTER
+            p.line_spacing = 1.05
+            sz = it.get("size", 14) if k == 0 else it.get("size2", 12)
+            _rich(p, ln, Pt(sz), _c(it.get("color", "ink")) if k == 0 else T.R_MID, k == 0 and it.get("bold", True))
+        return r
+
+    def _wire(self, s, it):
+        """折线（框图里的反馈回路）：points 为 [[x,y],...]，最后一段带箭头；可在 label_at 处写字。"""
+        pts = it["points"]
+        for k in range(len(pts) - 1):
+            last = k == len(pts) - 2
+            _line(s, pts[k][0], pts[k][1], pts[k + 1][0], pts[k + 1][1], color=it.get("color", "ink"),
+                  lw=it.get("lw", 1.25), head=last and it.get("head", True))
+        if it.get("text"):
+            lx, ly = it["label_at"]
+            w = it.get("w", 2.0)
+            tf = _box(s, lx - (w / 2 if it.get("align", "center") == "center" else 0), ly, w, 0.3, "middle")
+            tf.paragraphs[0].alignment = ALIGN[it.get("align", "center")]
+            _rich(tf.paragraphs[0], it["text"], Pt(it.get("size", 12)), _c(it.get("tcolor", "mid")))
 
     def _placeholder(self, s, it):
         """待补内容的占位框（如 Zemax 结果），虚线框 + 说明。"""
